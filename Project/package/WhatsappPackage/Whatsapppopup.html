@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/mainpage/WhatsappPackage/whatsapppop.css">
+</head>
+
+<body>
+    <div class="form-popup" id="popupid">
+        <form action="" id="addopeningamountpopup" onsubmit="return false">
+            <button type="button" class="btn btn-primary" id="closepopup" title="close popup" onclick="closepop()"><i class="fas fa-window-close"></i></button>
+            <div class="row">
+
+                <h5>Whatsapp Message</h5>
+            </div>
+
+            <select id="selectoption" onchange="refreshtable()">
+                <option>Select Option</option>
+                <option>Text</option>
+                <option>File</option>
+            </select><br>
+            <div class="column">
+                <input type="text" placeholder="Enter message" id="textmessage" required><br>
+
+                <input type="number" placeholder="Enter Mobile Number" id="mobilenumber" required><br>
+                <button type="submit" class="btn btn-primary" title="send message" onclick="sendtowhatsapp(this);">Send</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        var SEND_DATA_TYPES = '';
+        $('#selectoption').on('change', function() {
+            var values = this.value;
+            if (values != "Select Option") {
+                if (values == 'Text') {
+                    $('#textmessage').attr('type', 'text');
+                    SEND_DATA_TYPES = 'text';
+                    document.getElementById("textmessage").style.display = "block";
+                } else if (values == 'File') {
+                    SEND_DATA_TYPES = 'document';
+                    $('#textmessage').attr('type', 'file');
+                    document.getElementById("textmessage").style.display = "block";
+                }
+            }
+        });
+        var textmessage = '';
+        $('#textmessage').change(function(e) {
+            textmessage = e.target.files[0].name;
+            alert('The file "' + textmessage + '" has been selected.');
+        });
+
+        function sendtowhatsapp(id) {
+
+            if (SEND_DATA_TYPES == 'text') {
+                textmessage = document.getElementById("textmessage").value;
+            }
+            var mobilenumber = document.getElementById("mobilenumber").value;
+
+            if (mobilenumber != '') {
+                if (mobilenumber.length == 10) {
+                    var ww = window.open("https://api.whatsapp.com/send?phone=+91" + mobilenumber + "&" + SEND_DATA_TYPES + "=" + textmessage);
+                    console.log("https://api.whatsapp.com/send?phone=+91" + mobilenumber + "&" + SEND_DATA_TYPES + "=" + textmessage);
+                    closepop();
+                    setTimeout(function() {
+                        ww.close();
+                    }, 10000);
+                } else {
+                    alert('Enter number length 10');
+                }
+            } else {
+                alert('Please Enter Mobile Number ');
+            }
+        }
+
+        function closepop() {
+            document.getElementById("popupid").style.display = "none";
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,80 @@
+#MainDashboardid {
+    width: 100vw;
+    height: 89.7vh;
+    display: flex;
+    margin-top: 0rem;
+    margin-top: auto;
+    position: absolute;
+    margin-right: auto;
+    background-color: #3a536b;
+}
+
+#MainDashboardid #NavBardivid {
+    width: 13vw;
+    height: 87.7vh;
+    background-color: #e8e8e8;
+    float: left;
+    display: block;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    margin-left: .5rem;
+    margin-top: .5rem;
+    overflow: hidden;
+}
+
+#dashboardnavbarSupportedContent button {
+    width: 12vw;
+    font-size: 20px;
+    margin-top: 5rem;
+    font-weight: bold;
+    font-family: system-ui;
+    background: transparent;
+    color: black;
+    position: relative;
+    overflow: hidden;
+    outline: none;
+    border: none;
+}
+
+#dashboardnavbarSupportedContent button:hover,
+active {
+    border-radius: 20px !important;
+    background-color: #ffa62b;
+    border-left: 20px solid red;
+    -webkit-border-radius: 20px !important;
+    -moz-border-radius: 20px !important;
+    -ms-border-radius: 20px !important;
+    -o-border-radius: 20px !important;
+}
+
+#dashboardnavbarSupportedContent button:focus {
+    border-radius: 20px !important;
+    background-color: #ffa62b;
+    border-left: 20px solid red;
+    -webkit-border-radius: 20px !important;
+    -moz-border-radius: 20px !important;
+    -ms-border-radius: 20px !important;
+    -o-border-radius: 20px !important;
+}
+
+#MainDashboardid #load_pageExpenses {
+    width: 86vw;
+    height: 87.7vh;
+    float: right;
+    margin-top: .5rem;
+    display: block;
+    background-color: #1c2b2d;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    overflow: auto;
+}
+
+#MainDashboardid #dashboardnavbarSupportedContent {
+    display: block;
+    width: 13vw;
+    font-size: 20px;
+    text-align: center;
+    margin-left: .3rem;
+    margin-top: 0rem;
+    height: 91vh;
+}

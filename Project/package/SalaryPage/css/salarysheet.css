@@ -1,0 +1,501 @@
+        body {
+            background-color: transparent;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        html {
+            font-size: 70.5%;
+        }
+        
+        .row {
+            width: 100%;
+            height: 20vh;
+        }
+        
+        .column {
+            width: 56vw;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            align-items: center;
+            justify-content: space-between;
+            margin-left: 18px;
+            gap: 19px;
+        }
+        
+        .column1 {
+            display: grid;
+            margin: auto;
+            width: 23vw;
+            margin-left: 41%;
+            grid-template-columns: repeat(4, 1fr);
+            align-items: center;
+            justify-content: space-between;
+            gap: 7px;
+        }
+        
+        .column5 {
+            width: 33vw;
+            margin: auto;
+            height: 2vh;
+        }
+        
+        #buttondiv {
+            width: 33vw;
+        }
+        
+        #SALARY_FROM_DIV {
+            display: block;
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            background-color: white;
+        }
+        
+        #SALARY_FROM_DIV #itemsdiv {
+            display: grid;
+            grid-gap: 0px;
+            background-color: #526b7a;
+            width: 99vw;
+            height: 25vh;
+            border-radius: 1rem;
+            justify-content: center;
+            text-align: center;
+            align-items: center;
+            margin-top: .5rem;
+            margin-left: .5rem;
+            box-shadow: 1px 0px 3px 2px #0d0d0d;
+            -webkit-border-radius: 1rem;
+            -moz-border-radius: 1rem;
+            -ms-border-radius: 1rem;
+            -o-border-radius: 1rem;
+        }
+        
+        #SALARY_FROM_DIV .moreelement {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            background-color: transparent;
+            width: 98vw;
+            gap: 16px;
+            text-align: center;
+            justify-content: center;
+        }
+        
+        #SALARY_FROM_DIV .row-input-1 {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            background-color: transparent;
+            width: 98vw;
+            gap: 10px;
+            height: calc(25vh/2);
+            position: absolute;
+            text-align: center;
+            justify-content: center;
+            margin-left: 10px;
+        }
+        
+        #SALARY_FROM_DIV .row-input-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            background-color: transparent;
+            width: 98vw;
+            margin-top: calc(25vh/2);
+            height: calc(25vh/2);
+            position: fixed;
+            text-align: center;
+            justify-content: center;
+            margin-left: 10px;
+        }
+        
+        #SALARY_FROM_DIV .search-class {
+            width: 99vw;
+            height: 8vh;
+            background-color: #526b7a;
+            border-radius: 10px;
+            display: grid;
+            margin-top: 26vh;
+            position: fixed;
+            grid-template-columns: repeat(2, 1fr);
+            text-align: center;
+            align-items: center;
+            justify-items: center;
+            box-shadow: 1px 0px 3px 2px #0d0d0d;
+            -webkit-border-radius: 10px;
+        }
+        
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            background-color: red !important;
+            -webkit-background-color: red !important;
+            -webkit-transition: "color 9999s ease-out, background-color 9999s ease-out" !important;
+            -webkit-transition-delay: 9999s !important;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: white;
+            -moz-background-clip: text;
+            -moz-text-fill-color: transparent;
+        }
+        
+        #SALARY_FROM_DIV label {
+            text-align: center;
+            color: white;
+            font-size: 1.7rem;
+            font-weight: bold;
+            margin: 6px;
+        }
+        
+        h5 {
+            text-align: center;
+            color: white;
+            font-size: 1.8rem;
+        }
+        
+        #SALARY_FROM_DIV input {
+            /* width: 15vw; */
+            height: 6vh;
+            background-color: transparent !important;
+            border-radius: 10px;
+            box-shadow: none !important;
+            border: 3px solid white;
+            color: white;
+            font-size: 1.7rem;
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            -ms-border-radius: 10px;
+            -o-border-radius: 10px;
+        }
+        
+        #SALARY_FROM_DIV input:hover,
+        active,
+        focus {
+            background-color: transparent !important;
+            border: 3px solid yellow;
+        }
+        
+        #SALARY_FROM_DIV input::placeholder {
+            color: white;
+            opacity: 1;
+        }
+        
+        #SALARY_FROM_DIV input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+        
+        #SALARY_FROM_DIV select {
+            height: 6vh;
+            background-color: transparent;
+            border-radius: 10px;
+            border: 3px solid #f3f1f1;
+            color: white;
+            font-size: 1.8rem;
+            outline: none;
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            -ms-border-radius: 10px;
+            -o-border-radius: 10px;
+        }
+        
+        #SALARY_FROM_DIV option {
+            width: 13vw;
+            background-color: #a6a6a4;
+            border: 0px;
+            outline: none;
+            text-align: center;
+            color: black !important;
+        }
+        
+        #SALARY_FROM_DIV button {
+            background-color: transparent;
+            width: 7vw;
+            border: 2px solid currentColor;
+            font-family: roboto;
+            font-size: 2rem;
+            color: white;
+            border-color: #79a3b1;
+            -webkit-border-radius: 10px;
+            text-size-adjust: 88% !important;
+            -moz-border-radius: 10px;
+            -ms-border-radius: 10px;
+            -o-border-radius: 10px;
+        }
+        
+        #SALARY_FROM_DIV .search-class #printbtn {
+            width: 5.5vw;
+            margin: auto;
+            outline: none;
+            box-shadow: none;
+            border: none;
+        }
+        
+        #SALARY_FROM_DIV .search-class #backbtn {
+            width: 5vw;
+            margin-left: 1rem;
+            outline: none;
+            box-shadow: none;
+            border: none;
+        }
+        
+        #SALARY_FROM_DIV .search-class #nextbtn {
+            width: 5vw;
+            margin: auto;
+            outline: none;
+            box-shadow: none;
+            /* margin-left: -37px; */
+            border: none;
+        }
+        
+        #SALARY_FROM_DIV .search-class #nextbtn:hover {
+            color: white;
+            border-radius: 0;
+            background-color: transparent;
+            border-bottom: 3px solid green;
+            outline: none;
+            transition: all 0s;
+            -webkit-transition: all 0s;
+            -moz-transition: all 0s;
+            -ms-transition: all 0s;
+            -o-transition: all 0s;
+            -webkit-border-radius: 0;
+            -moz-border-radius: 0;
+            -ms-border-radius: 0;
+            -o-border-radius: 0;
+        }
+        
+        #SALARY_FROM_DIV .search-class #backbtn:hover {
+            color: white;
+            border-radius: 0;
+            background-color: transparent;
+            border-bottom: 3px solid green;
+            outline: none;
+            transition: all 0s;
+            -webkit-transition: all 0s;
+            -moz-transition: all 0s;
+            -ms-transition: all 0s;
+            -o-transition: all 0s;
+            -webkit-border-radius: 0;
+            -moz-border-radius: 0;
+            -ms-border-radius: 0;
+            -o-border-radius: 0;
+        }
+        
+        #SALARY_FROM_DIV button:hover {
+            color: white;
+            outline: none;
+            background-color: #11124d85;
+            transition: all .5s;
+            -webkit-transition: all .5s;
+            -moz-transition: all .5s;
+            -ms-transition: all .5s;
+            -o-transition: all .5s;
+        }
+        
+        #SALARY_FROM_DIV #addopeninamount {
+            text-align: center;
+            width: 20vw;
+        }
+        
+        #SALARY_FROM_DIV .search-class #searchinputid {
+            width: 20vw;
+            border-radius: 10px;
+            background-color: transparent;
+            border: 3px solid #f2ecec;
+            text-align: center;
+            color: white;
+            font-size: 1.7rem;
+            -webkit-border-radius: ;
+            -moz-border-radius: ;
+            -ms-border-radius: ;
+            -o-border-radius: ;
+        }
+        
+        #SALARY_FROM_DIV .search-class input[type=text]:focus,
+        hover,
+        active {
+            border-bottom-left-radius: 0px;
+            border-bottom-right-radius: 0px;
+            border-bottom: 3px solid red;
+            border-top-style: hidden;
+            border-right-style: hidden;
+            border-left-style: hidden;
+        }
+        
+        #SALARY_FROM_DIV .search-class input::placeholder {
+            color: white;
+            opacity: 1;
+        }
+        
+        #SALARY_FROM_DIV .search-class #selectmonth {
+            font-size: 1.7rem;
+            padding: 8px;
+            margin-left: 0;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 10px;
+            color: white;
+            background-color: transparent;
+            border: 3px solid #fffbfb;
+            outline: none;
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            -ms-border-radius: 10px;
+            -o-border-radius: 10px;
+        }
+        
+        #SALARY_FROM_DIV .search-class #selectyear {
+            font-size: 1.7rem;
+            padding: 8px;
+            margin-left: 0;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 10px;
+            color: white;
+            background-color: transparent;
+            border: 3px solid #fffbfb;
+            outline: none;
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            -ms-border-radius: 10px;
+            -o-border-radius: 10px;
+        }
+        
+        #SALARY_FROM_DIV .search-class option {
+            width: 12vw;
+            height: 6vh;
+            margin-top: .5rem;
+            margin-left: 1rem;
+            font-size: 17px;
+            padding: 8px;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 20px;
+            color: black !important;
+            background-color: white;
+            border: 3px solid #fffbfb;
+            outline: none;
+        }
+        
+        #SALARY_FROM_DIV .search-class i {
+            font-size: 20px;
+            text-align: center;
+        }
+        
+        #SALARY_FROM_DIV .search-class #resetbutton {
+            width: 3.5vw;
+            border-radius: 10px;
+            outline: none;
+            background-color: transparent;
+        }
+        
+        #SALARY_FROM_DIV .search-class #resetbutton i {
+            color: white;
+        }
+        
+        #SALARY_FROM_DIV .search-class h5 {
+            background-color: transparent;
+            width: 27vw;
+            height: 10vh;
+            margin-top: .5rem;
+            margin-left: 1rem;
+            text-align: center;
+            font-weight: bold;
+            font-size: 19px;
+            border-radius: 8px;
+            color: #fff5f5;
+        }
+        
+        #SALARY_FROM_DIV #tablediv {
+            width: 99vw;
+            height: 53vh;
+            background-color: transparent;
+            margin-top: calc(10.5vh);
+            margin-bottom: auto;
+            margin-left: auto;
+            border-radius: 10px;
+            margin-right: auto;
+            display: flex;
+        }
+        
+        #addpopup {
+            width: 100%;
+            height: 45vh;
+            background-color: red;
+            margin-left: .5rem;
+            margin-top: .5rem;
+            display: none;
+        }
+        
+        #OpeningPopup {
+            display: none;
+            width: 30%;
+            height: 20vh;
+            position: fixed;
+            background-color: darkcyan;
+            margin-left: 50%;
+            margin-top: 70%;
+            border-radius: 20px;
+            display: flex;
+            box-shadow: 1px 0px 8px 2px #0d0d0d;
+            z-index: 1;
+            -webkit-border-radius: 20px;
+            -moz-border-radius: 20px;
+            -ms-border-radius: 20px;
+            -o-border-radius: 20px;
+        }
+        
+        @media only screen and (min-width:600px) and (max-width:1020px) {
+            #SALARY_FROM_DIV {
+                background-color: yellow;
+                overflow: scroll;
+            }
+            html {
+                font-size: 50%;
+            }
+            #SALARY_FROM_DIV #itemsdiv {
+                background-color: red;
+                height: 54vh;
+                width: 97vw;
+            }
+            #SALARY_FROM_DIV #inputdiv {
+                grid-template-columns: repeat(3, 1fr);
+                grid-auto-rows: minmax(68px, auto);
+                width: 97vw;
+                height: 24vh;
+                position: absolute;
+                margin: auto;
+                justify-content: center;
+                align-items: center;
+                justify-items: center;
+            }
+            #SALARY_FROM_DIV #itemsdiv #div2 {
+                grid-template-columns: repeat(3, 1fr);
+                grid-auto-rows: minmax(68px, auto);
+                width: 97vw;
+                height: 24vh;
+                position: absolute;
+                margin: auto;
+                justify-content: center;
+                align-items: center;
+                justify-items: center;
+            }
+            input {
+                height: 8vh !important;
+            }
+            #SALARY_FROM_DIV .search-class {
+                width: 97vw;
+                height: 11vh;
+                grid-template-columns: repeat(2, 1fr);
+                border-radius: 10px;
+                margin-top: 37px;
+            }
+            #SALARY_FROM_DIV #itemsdiv #div2 .moreelement {
+                grid-template-columns: repeat(4, 1fr);
+                background-color: transparent;
+                width: 67vw;
+                gap: 16px;
+            }
+        }

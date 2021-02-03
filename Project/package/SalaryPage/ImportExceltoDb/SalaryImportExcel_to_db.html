@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>d</title>
+    <link rel="stylesheet" type="text/css" href="/mainpage/SalaryPage/ImportExceltoDb/Imoprtcss.css">
+</head>
+
+<body>
+    <div class="form-popup" id="importpopupid">
+        <form action="" id="addopeningamountpopup" onsubmit="return false">
+
+            <div class="form-group" id="optionselect" style="float: left;">
+                <select id="selectmonthid" title="select month">
+                    </select>
+                <select id="selectyearid" title="select year" onclick="selectYearOption();">
+                    </select>
+                <input type="file" class="btn btn-primary" id="savedataid" title="select files" accept=".xls,.xlsx">
+                <button type="button" class="btn btn-primary" id="uploaddata" title="upload data" onclick="insertdb(this);"><i class="fas fa-upload"></i> Upload</button>
+            </div>
+            <div style="float: right ;">
+                <button type="button" class="btn btn-primary" title="close popup" id="closeFormpopup" onclick="closeForm()"><i class="fas fa-times" title="Close popup"></i></button>
+            </div>
+            <div class="MAINTABELDIV">
+                <div class="HeaderDIV">
+                    <table class="table-responsive" id="expensestable">
+                        <thead>
+                            <tr>
+                                <th class="col1">Sr.No.</th>
+                                <th class="col1">Date</th>
+                                <th class="col">Employes Name</th>
+                                <th class="col">Designation</th>
+                                <th class="col">Salary of Month</th>
+                                <th class="col">Convenience Date</th>
+                                <th class="col">Convenience Amount</th>
+                                <th class="col">Maintanance Amount</th>
+                                <th class="col">Advance Amount</th>
+                                <th class="col">Total Salary Month</th>
+                                <th class="col">Method of Status</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="TableBody">
+                    <table class="table-responsive" id="trtableid">
+                        <tbody id="Tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <script>
+        var months = new Array(12);
+        months[0] = "January";
+        months[1] = "February";
+        months[2] = "March";
+        months[3] = "April";
+        months[4] = "May";
+        months[5] = "June";
+        months[6] = "July";
+        months[7] = "August";
+        months[8] = "September";
+        months[9] = "October";
+        months[10] = "November";
+        months[11] = "December";
+
+        var current_date = new Date();
+        month_value = current_date.getMonth();
+        year_value = current_date.getFullYear();
+
+        var idofmonth = document.getElementById("selectmonthid");
+        for (var i = 0; i < months.length; i++) {
+            idofmonth.add(new Option(months[i], months[i]));
+            $("#selectmonthid").find("option").addClass("SelectMonthOption");
+        }
+        setSelectValues("selectmonthid", months[month_value]);
+        var idofyear = document.getElementById("selectyearid");
+        for (var i = 1996; i < 2040; i++) {
+            idofyear.add(new Option(i, i));
+            $("#selectyearid").find("option").addClass("SelectYearOption");
+        }
+        setSelectValues("selectyearid", year_value);
+
+        function setSelectValues(id, val) {
+            document.getElementById(id).value = val;
+        }
+
+        $("#selectyearid")
+            .change(function() {
+                var str = "";
+                $("#selectyearid option:selected").each(function() {
+                    var startloop = 0;
+                    if (month_value == 0) {
+                        startloop = 2;
+                    } else {
+                        startloop = month_value;
+                    }
+                    var m = document.getElementById("selectmonthid");
+                    var month = m.options[m.selectedIndex].text;
+                    var y = document.getElementById("selectyearid");
+                    var year = y.options[y.selectedIndex].text;
+
+                    if (year <= year_value) {
+                        for (let index = 0; index < months.length; index++) {
+                            document.getElementById("selectmonthid").options[index].disabled = false;
+                        }
+                    } else {
+                        for (let index = 0; index < months.length; index++) {
+                            document.getElementById("selectmonthid").options[index].disabled = true;
+                        }
+                    }
+                });
+            }).change();
+    </script>
+    <script>
+        function closeForm() {
+            document.getElementById("importpopupid").style.display = "none";
+        }
+
+        var arradata = {};
+        var columns = [];
+        var sr_no = [];
+        var getDate = [];
+        var getCustomerName = [];
+        var getBankName = [];
+        var getCheuqe_No = [];
+        var getBank_Transfer_Amount = [];
+        var getAmount_Status = [];
+        var getCheque_Amount = [];
+
+        var ExcelToJSON = function() {
+            this.parseExcel = function(file) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var data = e.target.result;
+                    var workbook = XLSX.read(data, {
+                        type: 'binary'
+                    });
+                    workbook.SheetNames.forEach(function(sheetName) {
+                        var XL_row_object = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+                        arradata = JSON.stringify(XL_row_object);
+                        BindTable(JSON.parse(arradata));
+                    })
+                };
+                reader.onerror = function(ex) {
+                    console.log(ex);
+                };
+                reader.readAsBinaryString(file);
+            };
+        };
+
+        function BindTable(jsondata) {
+            columns = BindTableHeader(jsondata);
+            var len = document.getElementById('expensestable').getElementsByTagName('th').length;
+            if (columns.length == len) {
+                for (var i = 0; i < jsondata.length; i++) {
+                    sr_no.push(jsondata[i][columns[0]]);
+                    getDate.push(jsondata[i][columns[1]]);
+                    getCustomerName.push(jsondata[i][columns[2]]);
+                    getBankName.push(jsondata[i][columns[3]]);
+                    getCheuqe_No.push(jsondata[i][columns[4]]);
+                    getBank_Transfer_Amount.push(jsondata[i][columns[5]]);
+                    getAmount_Status.push(jsondata[i][columns[6]]);
+                    getCheque_Amount.push(jsondata[i][columns[7]]);
+
+                    $('#importTbody').append('<tr><td class="col">' + jsondata[i][columns[0]] + '</td><td class="col">' +
+                        jsondata[i][columns[1]] + '</td><td class="col">' + jsondata[i][columns[2]] +
+                        '</td><td class="col">' + jsondata[i][columns[3]] + '</td><td class="col">' + jsondata[i][columns[4]] +
+                        '</td><td class="col">' + jsondata[i][columns[5]] + '</td> <td class="col1">' + jsondata[i][columns[6]] +
+                        '</td><td class="col">' + jsondata[i][columns[7]] + '</tr>');
+                }
+            } else {
+                alert('Not insert data becaues length not equal\n Insert Table Column lenght[' + columns.length + "]\nTable Column lenght[" + len + "]");
+            }
+        }
+
+        function BindTableHeader(jsondata) {
+            var columnSet = [];
+            for (var i = 0; i < jsondata.length; i++) {
+                var rowHash = jsondata[i];
+                for (var key in rowHash) {
+                    if (rowHash.hasOwnProperty(key)) {
+                        if ($.inArray(key, columnSet) == -1) {
+                            columnSet.push(key);
+                        }
+                    }
+                }
+            }
+            return columnSet;
+        }
+
+        function handleFileSelect(evt) {
+            var files = evt.target.files;
+            var xl2json = new ExcelToJSON();
+            xl2json.parseExcel(files[0]);
+        }
+    </script>
+    <script>
+        function insertdb(id) {
+            var m = document.getElementById("selectmonthid");
+            var month = m.options[m.selectedIndex].text;
+            var y = document.getElementById("selectyearid");
+            var year = y.options[y.selectedIndex].text;
+
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:2000/CHEQUE_PAGE/ChequeImportData",
+                data: {
+                    id: sr_no,
+                    GetDate: getDate,
+                    GetCustomerName: getCustomerName,
+                    GetBankName: getBankName,
+                    GetBank_Transfer_Amount: getBank_Transfer_Amount,
+                    GetCheuqe_No: getCheuqe_No,
+                    GetCheque_Amount: getCheque_Amount,
+                    GetAmount_Status: getAmount_Status,
+                    insertdatetime: (new Date().toDateString() + " " + new Date().toLocaleTimeString()),
+                    month: month,
+                    year: year
+                },
+                success: function(data) {
+                    alert(data);
+                },
+                error: function(jqXHR, textStatus, err) {
+                    alert('text status ' + textStatus + ', err ' + err)
+                }
+            });
+        }
+        document.getElementById('savedataid').addEventListener('change', handleFileSelect, false);
+    </script>
+    <script type="text/javascript" src="/mainpage/getMonthYear.js"></script>
+</body>
+
+</html>

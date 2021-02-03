@@ -1,0 +1,204 @@
+.table100 .ps__rail-y {
+    width: 9px;
+    background-color: transparent;
+    opacity: 1!important;
+    /* right: 5px */
+}
+
+.table100 .ps__rail-y::before {
+    content: "";
+    display: block;
+    position: absolute;
+    background-color: #ebebeb;
+    border-radius: 5px;
+    width: 100%;
+    height: calc(100% - 30px);
+    left: 0;
+    top: 15px
+}
+
+.table100 .ps__rail-y .ps__thumb-y {
+    width: 100%;
+    right: 0;
+    background-color: transparent;
+    opacity: 1!important
+}
+
+.table100 .ps__rail-y .ps__thumb-y::before {
+    content: "";
+    display: block;
+    position: absolute;
+    background-color: #ccc;
+    border-radius: 5px;
+    width: 100%;
+    height: calc(100% - 30px);
+    left: 0;
+    top: 15px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+
+.limiter {
+    width: 100%;
+    height: 98%;
+    background-color: blanchedalmond;
+    margin: auto;
+}
+
+.container-table100 {
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.wrap-table100 {
+    width: 100%;
+    height: 100%;
+}
+
+.table100 {
+    background-color: #fff
+}
+
+table {
+    width: 100%;
+    height: 100%;
+}
+
+th,
+td {
+    font-weight: unset;
+    /* padding-right: 10px */
+}
+
+.column1 {
+    width: 5% !important;
+}
+
+.column2 {
+    width: 7%
+}
+
+.column3 {
+    width: 7%
+}
+
+.column4 {
+    width: 7%
+}
+
+.column5 {
+    width: 7%
+}
+
+.column6 {
+    width: 7%
+}
+
+.column7 {
+    width: 7%
+}
+
+.column8 {
+    width: 7%
+}
+
+.column9 {
+    width: 7%
+}
+
+.column10 {
+    width: 7%
+}
+
+.column11 {
+    width: 13%
+}
+
+.column12 {
+    width: 13%
+}
+
+.table100-head th {
+    /* padding-top: 10px; */
+    /* padding-bottom: 10px */
+}
+
+.table100-body td {
+    /* padding-top: 5px; */
+    /* padding-bottom: 5px */
+}
+
+.table100 {
+    position: fixed;
+    padding-top: 60px
+}
+
+.table100-head {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0
+}
+
+.table100-body {
+    height: 100%;
+    overflow: auto
+}
+
+.table100.ver1 th {
+    font-weight: bold;
+    font-family: cursive;
+    font-size: 16px;
+    color: #fff;
+    line-height: 1.4;
+    background-color: #6c7ae0;
+}
+
+.table100.ver1 td {
+    font-family: Lato-Regular;
+    font-size: 15px;
+    color: gray;
+    line-height: 1.4
+}
+
+.table100.ver1 .table100-body tr:nth-child(even) {
+    background-color: #f8f6ff
+}
+
+.table100.ver1 {
+    border-radius: 10px;
+    height: 70%;
+    overflow: hidden;
+    box-shadow: 0 0 40px 0 rgba(0, 0, 0, .15);
+    -moz-box-shadow: 0 0 40px 0 rgba(0, 0, 0, .15);
+    -webkit-box-shadow: 0 0 40px 0 rgba(0, 0, 0, .15);
+    -o-box-shadow: 0 0 40px 0 rgba(0, 0, 0, .15);
+    -ms-box-shadow: 0 0 40px 0 rgba(0, 0, 0, .15);
+    -webkit-border-radius: ;
+    -moz-border-radius: ;
+    -ms-border-radius: ;
+    -o-border-radius: ;
+}
+
+.table100.ver1 .ps__rail-y {
+    right: 5px
+}
+
+.table100.ver1 .ps__rail-y::before {
+    background-color: #ebebeb
+}
+
+.table100.ver1 .ps__rail-y .ps__thumb-y::before {
+    background-color: #ccc
+}

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Expenses Page</title>
+    <link rel="stylesheet" type="text/css" href="/mainpage/ExpensesPage/csspage/ExpensesPage.css">
+</head>
+
+<body>
+    <form action="" id="Expensesformid" onsubmit="return false">
+        <div id="ELEMENT_ADD_DIV">
+            <div class="row">
+                <div class="form-group">
+                    <label for="inputAddress">Date *</label>
+                    <input type="text" class="form-control" id="dateinput" placeholder="Enter Date" onclick="showpopCalender('#dateinput');">
+                </div>
+                <div class="form-group">
+                    <label for="inputAddress">Method of Income *</label>
+                    <select class="form-control" id="selectmethodofincome" onchange="methodnotequal()">
+                    <option>Select Method</option>
+                    <option>Debit</option>
+                    <option>Credit</option>
+                    <option>Cheque</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="inputAddress">Paid To *</label>
+                    <input type="text" class="form-control" id="paidtoinput" placeholder="Enter Paid to"></div>
+
+                <div class="form-group">
+                    <label for="inputAddress">Decription *</label>
+                    <input type="text" class="form-control" id="descriptioninput" placeholder="Enter Description"></div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="inputAddress">SubTitle *</label>
+                    <input type="text" class="form-control" id="subtitleinput" placeholder="Enter SubTitle"></div>
+
+                <div class="form-group">
+                    <label for="inputAddress">Option SubTitle</label>
+                    <select class="form-control" id="selectsubtitlevalue" onchange="setTextBoxval()">
+			<option>Select values</option>
+		</select>
+                </div>
+                <div class="form-group">
+                    <label for="inputAddress">Amount *</label>
+                    <input type="number" class="form-control" id="amountinput" placeholder="Enter Amount"></div>
+
+                <div class="form-group">
+                    <div class="flex-md-row">
+                        <button type="submit" class="btn btn-primary" id="insertbutton" title="Save button" onclick="insert(this);"><i class="fas fa-plus-circle"></i> inesrt</button>
+                        <button type="submit" class="btn btn-primary" id="updatebutton" title="Update button"><i class="fas fa-sync-alt"></i> Update</button>
+                        <button type="submit" class="btn btn-primary" id="importbutton" title="import button" onclick="importExceltoDB(this)"><i class="fas fa-upload"></i> Import</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="SEARCH_ADD_DIV">
+            <div class="column1">
+                <input type="text" class="form-control" id="searchinputid" placeholder="Search [Name,Date,etc]" onkeyup="serach();">
+                <select id="selectmonth" onchange="refreshtable()"></select>
+                <select id="selectyear" onchange="refreshtable()"></select>
+            </div>
+
+            <div class="column2">
+                <button type="submit" class="btn btn-primary" id="addopeninamount" title="Add Opening Amount button" onclick="addopeningamount();"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add Opening Amount</button>
+                <button type="submit" class="btn btn-primary" id="resetbutton" title="Reset here" onclick=" reloadtable();"><i class="fas fa-sync-alt"></i></button>
+                <button type="submit" class="btn btn-primary" id="whatsappbtn" title="Whatsapp here" onclick="WhatsappPopUpOpen();"><i class="fab fa-whatsapp" aria-hidden="true"></i></button>
+                <button type="submit" class="btn btn-primary" id="BackPage" title="Back here" onclick=" reloadtable();"><i class="fas fa-arrow-left"> Back</i></button>
+                <button type="submit" class="btn btn-primary" id="NextPage" title="Next here" onclick=" reloadtable();">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+
+        </div>
+
+        <div id="OpeningPopup"></div>
+        <div id="tablediv"></div>
+    </form>
+
+    <script>
+        var months = new Array(12);
+        months[0] = "January";
+        months[1] = "February";
+        months[2] = "March";
+        months[3] = "April";
+        months[4] = "May";
+        months[5] = "June";
+        months[6] = "July";
+        months[7] = "August";
+        months[8] = "September";
+        months[9] = "October";
+        months[10] = "November";
+        months[11] = "December";
+
+        var current_date = new Date();
+        month_value = current_date.getMonth();
+        year_value = current_date.getFullYear();
+
+        var idofmonth = document.getElementById("selectmonth");
+        for (var i = 0; i < months.length; i++) {
+            idofmonth.add(new Option(months[i], months[i]));
+        }
+        setSelectValues("selectmonth", months[month_value]);
+        var idofyear = document.getElementById("selectyear");
+        for (var i = 1996; i < 2040; i++) {
+            idofyear.add(new Option(i, i));
+        }
+        setSelectValues("selectyear", year_value);
+
+        function setSelectValues(id, val) {
+            document.getElementById(id).value = val;
+        }
+        $("#selectyear")
+            .change(function() {
+                $("#selectyear option:selected").each(function() {
+                    var startloop = 0;
+                    if (month_value == 0) {
+                        startloop = 2;
+                    } else {
+                        startloop = month_value;
+                    }
+                    var m = document.getElementById("selectmonth");
+                    var month = m.options[m.selectedIndex].text;
+                    var y = document.getElementById("selectyear");
+                    var year = y.options[y.selectedIndex].text;
+
+                    if (year <= year_value) {
+                        for (let index = 0; index < months.length; index++) {
+                            document.getElementById("selectmonth").options[index].disabled = false;
+                        }
+                    } else {
+                        for (let index = 0; index < months.length; index++) {
+                            document.getElementById("selectmonth").options[index].disabled = true;
+                        }
+                    }
+                });
+            }).change();
+
+        function setTextBoxval() {
+            var y = document.getElementById("selectsubtitlevalue");
+            if (y.options[y.selectedIndex].text != 'Select values') {
+                document.getElementById("subtitleinput").value = y.options[y.selectedIndex].text;
+            } else {
+                alert("select other option");
+            }
+        }
+
+        function methodnotequal() {
+            var y = document.getElementById("selectmethodofincome");
+            if (y.options[y.selectedIndex].text != 'Select Method') {} else {
+                alert("select other option");
+            }
+        }
+
+        function reloadtable() {
+            setSelectValues("selectmonth", months[month_value]);
+            setSelectValues("selectyear", year_value);
+            refreshtable();
+        }
+    </script>
+    <script>
+        var selectedrow = "";
+        var selectedrowid = 0;
+        // dateinput,selectmethodofincome,paidtoinput,descriptioninput,subtitleinput,selectsubtitlevalue,amountinput
+        function insert(id) {
+            var SubTitletext = "";
+            var date = document.getElementById("dateinput").value;
+            var paidtotext = document.getElementById("paidtoinput").value;
+            var descriptiontext = document.getElementById("descriptioninput").value;
+            var amounttext = document.getElementById("amountinput").value;
+            var dateMomentObject = moment(date, "YYYY-MM-DD").format("DD/MM/YYYY");
+
+            var e = document.getElementById("selectmethodofincome");
+            var methoofincomeselect = e.options[e.selectedIndex].text;
+            var subtitleinputtext = document.getElementById("subtitleinput").value;
+            var s = document.getElementById("selectsubtitlevalue");
+            if (subtitleinputtext != '') {
+                SubTitletext = subtitleinputtext;
+            } else {
+                if (s.selectedIndex > 0) {
+                    SubTitletext = s.options[s.selectedIndex].text;
+                } else {
+                    alert("SubTitle Empty");
+                }
+            }
+            var m = document.getElementById("selectmonth");
+            var selectmonth = m.options[m.selectedIndex].text;
+            var y = document.getElementById("selectyear");
+            var selectyear = y.options[y.selectedIndex].text;
+
+            if (paidtotext != '' && descriptiontext != '' && amounttext != '' && date != 'dd/mm/yyy' && date != 'Enter date' && month != 'Select Month' && year != 'Select Year' && methoofincomeselect != 'Select Method' && subtitleinputtext != '') {
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:2000/expensespage/Expensesinsert",
+                    data: {
+                        date: dateMomentObject,
+                        methodofincome: methoofincomeselect,
+                        paid_to: paidtotext,
+                        description: descriptiontext,
+                        amount: amounttext,
+                        month: selectmonth,
+                        year: selectyear,
+                        subtitle: SubTitletext,
+                        insertdatetime: (new Date().toDateString() + " " + new Date().toLocaleTimeString())
+                    },
+                    success: function(data) {
+                        alert('Success insert data');
+                        refreshtable();
+                    },
+                    error: function(jqXHR, textStatus, err) {
+                        alert('text status ' + textStatus + ', err ' + err)
+                    }
+                });
+            } else {
+                alert("Please Change values.");
+            }
+        }
+
+        function updatetodb(id) {
+            var SubTitletext = "";
+            var date = document.getElementById("dateinput").value;
+            var paidtotext = document.getElementById("paidtoinput").value;
+            var descriptiontext = document.getElementById("descriptioninput").value;
+            var amounttext = document.getElementById("amountinput").value;
+            var m = document.getElementById("selectmonth");
+            var month = m.options[m.selectedIndex].text;
+            var y = document.getElementById("selectyear");
+            var year = y.options[y.selectedIndex].text;
+            var e = document.getElementById("selectmethodofincome");
+            var methoofincomeselect = e.options[e.selectedIndex].text;
+            var subtitleinputtext = document.getElementById("subtitleinput").value;
+            var s = document.getElementById("selectsubtitlevalue");
+
+            if (subtitleinputtext != '') {
+                SubTitletext = subtitleinputtext;
+                console.log("input text :" + SubTitletext);
+            } else {
+                if (s.selectedIndex > 0) {
+                    SubTitletext = s.options[s.selectedIndex].text;
+                    console.log("select :" + SubTitletext);
+                } else {
+                    alert("SubTitle Empty");
+                }
+            }
+            var dateMomentObject = moment(date, "YYYY-MM-DD").format("DD/MM/YYYY");
+
+            if (paidtotext != '' && descriptiontext != '' && amounttext != '' && date != 'dd/mm/yyy' && date != 'Enter date' && month != 'Select Month' && year != 'Select Year' && methoofincomeselect != 'Select Method' && subtitleinputtext != '') {
+                if (selectedrowid != 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: "http://localhost:2000/ExpensesUpdate/ExpensesUpdate",
+                        data: {
+                            METHOD_OF_PAYMENT: methoofincomeselect,
+                            id: selectedrowid,
+                            DATE_OF_PAYMENT: dateMomentObject,
+                            PAID_TO: paidtotext,
+                            DESCRIPTION: descriptiontext,
+                            amount: amounttext,
+                            month: month,
+                            year: year
+                        },
+                        success: function(data) {
+                            alert("Delete data");
+                            refreshtable();
+                        },
+                        error: function(jqXHR, textStatus, err) {
+                            alert('text status ' + textStatus + ', err ' + err)
+                        }
+                    });
+                } else {
+                    alert("Table Row Not Selected");
+                }
+            } else {
+                alert("Please Change values.");
+            }
+        }
+
+        function editable(td) {
+            selectedrow = td.parentElement.parentElement;
+            selectedrowid = selectedrow.cells[0].innerHTML;
+
+            var dateMomentObject = moment(selectedrow.cells[1].innerHTML, "DD/MM/YYYY").format("YYYY-MM-DD");
+            document.getElementById("dateinput").value = dateMomentObject;
+
+            if (selectedrow.cells[2].innerHTML != "Empty") {
+                document.getElementById("selectmethodofincome").value = selectedrow.cells[2].innerHTML;
+            }
+            document.getElementById("paidtoinput").value = selectedrow.cells[3].innerHTML;
+            document.getElementById("descriptioninput").value = selectedrow.cells[4].innerHTML;
+            document.getElementById("subtitleinput").value = selectedrow.cells[8].innerHTML;
+            document.getElementById("selectsubtitlevalue").value = selectedrow.cells[8].innerHTML;
+            if (selectedrow.cells[2].innerHTML == 'Debit') {
+                document.getElementById("amountinput").value = selectedrow.cells[5].innerHTML;
+            } else {
+                document.getElementById("amountinput").value = selectedrow.cells[6].innerHTML;
+            }
+        }
+
+        function del(td) {
+            editable(td);
+            var txt = "";
+            selectedrow = td.parentElement.parentElement;
+            var deleteid = selectedrow.cells[0].innerHTML;
+            var m = document.getElementById("selectmonth");
+            var month = m.options[m.selectedIndex].text;
+            var y = document.getElementById("selectyear");
+            var year = y.options[y.selectedIndex].text;
+
+            var e = document.getElementById("selectmethodofincome");
+            var methoofincomeselect = e.options[e.selectedIndex].text;
+            var amounttext = document.getElementById("amountinput").value;
+
+            var r = confirm("You want to delete no. [" + deleteid + "]");
+            if (r == true) {
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:2000/ExpensesDelete/ExpensesDelete",
+                    data: {
+                        selelctmethod: methoofincomeselect,
+                        id: deleteid,
+                        amount: amounttext,
+                        month: month,
+                        year: year
+                    },
+                    success: function(data) {
+                        alert("Delete data");
+                        refreshtable();
+                    },
+                    error: function(jqXHR, textStatus, err) {
+                        alert('text status ' + textStatus + ', err ' + err)
+                    }
+                });
+            }
+        }
+
+        function addopeningamount() {
+            $('#OpeningPopup').load('/mainpage/ExpensesPage/OpeningAmountPop/html/OpeningAmountHtml.html');
+        }
+
+        function WhatsappPopUpOpen() {
+            $('#OpeningPopup').load('/mainpage/WhatsappPackage/Whatsapppopup.html');
+        }
+    </script>
+    <script>
+        var m = document.getElementById("selectmonth");
+        var month = m.options[m.selectedIndex].value;
+        var y = document.getElementById("selectyear");
+        var year = y.options[y.selectedIndex].value;
+
+        function refreshtable() {
+            var m = document.getElementById("selectmonth");
+            var month = m.options[m.selectedIndex].value;
+            var y = document.getElementById("selectyear");
+            var year = y.options[y.selectedIndex].value;
+
+            $('#tablediv').load('/mainpage/ExpensesPage/TableDesign/TableShowindiv.html');
+
+
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:2000/expensespage/month-year",
+                data: {
+                    month: month,
+                    year: year
+                },
+                success: function(data) {},
+                error: function(jqXHR, textStatus, err) {
+                    alert('text status ' + textStatus + ', err ' + err)
+                }
+            });
+            showopeningamount();
+            var subtitle = document.getElementById("selectsubtitlevalue");
+            $.ajax({
+                    type: 'GET',
+                    url: 'http://localhost:2000/expensespage/getsubtitle',
+                    dataType: 'json'
+                }).done(function(data) {
+                    for (let index = 0; index < Object.keys(data).length; index++) {
+                        if (data[index].SUBTITLE != 'Empty') {
+                            subtitle.add(new Option(data[index].SUBTITLE, data[index].SUBTITLE));
+                        }
+                    }
+                })
+                .fail(function(jqXHR, textstatus, err) {});
+        }
+
+        function showopeningamount() {
+            var m = document.getElementById("selectmonth");
+            var month = m.options[m.selectedIndex].value;
+            var y = document.getElementById("selectyear");
+            var year = y.options[y.selectedIndex].value;
+
+            $.ajax({
+                    type: 'GET',
+                    url: 'http://localhost:2000/expensespage/getOpeningAmount',
+                    dataType: 'json'
+                }).done(function(data) {
+                    if (Object.keys(data).length == 0) {
+                        document.getElementById("dateinput").disabled = true;
+                        document.getElementById("addopeninamount").disabled = false;
+                        document.getElementById("selectmethodofincome").disabled = true;
+                        document.getElementById("paidtoinput").disabled = true;
+                        document.getElementById("descriptioninput").disabled = true;
+                        document.getElementById("subtitleinput").disabled = true;
+                        document.getElementById("selectsubtitlevalue").disabled = true;
+                        document.getElementById("amountinput").disabled = true;
+                        document.getElementById("insertbutton").disabled = true;
+                        document.getElementById("updatebutton").disabled = true;
+                        // document.getElementById("importbutton").disabled =true;
+                        document.getElementById("creditamountbutton").disabled = true;
+                        document.getElementById("debiteamountbutton").disabled = true;
+                        document.getElementById("chequeamountbutton").disabled = true;
+
+                        var OPENING_AMOUNT = new Intl.NumberFormat('en-IN', {
+                            style: 'currency',
+                            currency: 'INR'
+                        }).format(0);
+                        document.getElementById("openingamount").innerHTML = "Opening Amount <br>" + OPENING_AMOUNT;
+                        document.getElementById("CurrentAmountid").innerHTML = "Current Amount <br>" + OPENING_AMOUNT;
+                    } else {
+                        document.getElementById("dateinput").disabled = false;
+                        document.getElementById("addopeninamount").disabled = true;
+                        document.getElementById("selectmethodofincome").disabled = false;
+                        document.getElementById("paidtoinput").disabled = false;
+                        document.getElementById("descriptioninput").disabled = false;
+                        document.getElementById("subtitleinput").disabled = false;
+                        document.getElementById("selectsubtitlevalue").disabled = false;
+                        document.getElementById("amountinput").disabled = false;
+                        document.getElementById("insertbutton").disabled = false;
+                        document.getElementById("updatebutton").disabled = false;
+                        // document.getElementById("importbutton").disabled=false;
+                        document.getElementById("creditamountbutton").disabled = false;
+                        document.getElementById("debiteamountbutton").disabled = false;
+                        document.getElementById("chequeamountbutton").disabled = false;
+
+                        var OPENING_AMOUNT = new Intl.NumberFormat('en-IN', {
+                            style: 'currency',
+                            currency: 'INR'
+                        }).format(data[0].BALANCE);
+
+                        var CURRENT_AMOUNT = new Intl.NumberFormat('en-IN', {
+                            style: 'currency',
+                            currency: 'INR'
+                        }).format(data[Object.keys(data).length - 1].BALANCE);
+                        document.getElementById("CurrentAmountid").title = "Company Current Amount : " + CURRENT_AMOUNT;
+                        document.getElementById("openingamount").title = "Company Opening Amount : " + OPENING_AMOUNT;
+
+                        document.getElementById("openingamount").innerHTML = "Opening Amount <br>" + OPENING_AMOUNT;
+                        document.getElementById("CurrentAmountid").innerHTML = "Current Amount <br>" + CURRENT_AMOUNT;
+                    }
+                })
+                .fail(function(jqXHR, textstatus, err) {
+                    $('#tbodyid').html("data not exit");
+                });
+
+        }
+
+        function importExceltoDB(id) {
+            $('#OpeningPopup').load('/mainpage/ExpensesPage/ImportExceltoDb/html/ExceltoDb_Import.html');
+        }
+
+        function showAmountInbutton(text, columnname) {
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:2000/expensespage/postOpeningAmountShow",
+                data: {
+                    Text_Amount: text,
+                    COLNUM_NAME: columnname,
+                    month: month,
+                    year: year
+                },
+                success: function(data) {},
+                error: function(jqXHR, textStatus, err) {
+                    alert('text status ' + textStatus + ', err ' + err)
+                }
+            });
+            $('#OpeningPopup').empty();
+            $('#OpeningPopup').load('/mainpage/ExpensesPage/OpeningAmountPop/html/AmountShowPopUp.html');
+        }
+        refreshtable();
+        showopeningamount();
+    </script>
+    <script type="text/javascript" src="/mainpage/CalenderUI/script.js"></script>
+    <script>
+        document.getElementById("updatebutton").addEventListener("click", function() {
+            updatetodb("updatebutton");
+        });
+        addCalenderIcon('#dateinput');
+    </script>
+    <script type="text/javascript" src="/mainpage/ExpensesPage/TableDesign/TableSearch.js"></script>
+</body>
+
+</html>

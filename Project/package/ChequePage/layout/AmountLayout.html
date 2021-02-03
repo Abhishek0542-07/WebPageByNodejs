@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <style>
+        #Maincard {
+            display: block;
+            width: 100%;
+            margin: auto;
+            height: 100%;
+            border-radius: 10px;
+            background-color: #32605c;
+        }
+        
+        #Maincard .column {
+            width: 98%;
+            height: 100%;
+            background-color: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+            flex-direction: column;
+            margin: auto;
+            text-align: center;
+        }
+        
+        #Maincard .column .card {
+            width: calc(77%/5) !important;
+            height: 62% !important;
+            background-color: #f8f8f8;
+            border-bottom: 1rem solid #ffb400;
+            border-top: 1rem solid #fab207;
+            text-align: center;
+            justify-content: center;
+            box-shadow: -1px 1px 3px 3px #2c2d2f;
+        }
+        
+        #Maincard .column .row {
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+            justify-content: center;
+            display: flex;
+            text-align: center;
+            flex-direction: column;
+            align-items: center;
+            margin: auto;
+        }
+        
+        #Maincard .col-lg {
+            width: 70%;
+        }
+        
+        #Maincard .column h5 {
+            color: black;
+            font-size: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        #Maincard .column i {
+            color: black;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="Maincard">
+        <h5 style="font-size: 27px;
+        font-weight: bold;
+        padding: 14px;
+        height: 6%;
+        text-align: center;
+        justify-content: center;"> Amount Panel</h5>
+        <div class="column">
+            <div class="row">
+                <div class="card">
+                    <h5 id="totalbanktransferamount">Total Bank Transfer Amount <br><i class="fas fa-rupee-sign"></i>
+                    </h5>
+                </div>
+
+                <div class="card">
+                    <h5 id="totalchequeamount">Total Cheque Amount<br><i class="fas fa-rupee-sign"></i>
+                    </h5>
+                </div>
+
+                <div class="card">
+                    <h5 id="totalamount(cheque+bank)">Total Amount (Cheque+Bank)<br>
+                        <i class="fas fa-rupee-sign"></i>
+                    </h5>
+                </div>
+
+                <div class="card">
+                    <h5 id="banktransfergstamount">Total Bank Transfer GST Amount<br><i class="fas fa-rupee-sign"></i></h5>
+                </div>
+
+                <div class="card">
+                    <h5 id="chequegstamount">Total Cheque GST Amount<br><i class="fas fa-rupee-sign"></i></h5>
+                </div>
+                <div class="card">
+                    <h5 id="totalgstamount">Total GST Amount<br><i class="fas fa-rupee-sign"></i></h5>
+                </div>
+            </div>
+
+            <div class="row">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $.ajax({
+                type: 'GET',
+                url: 'http://localhost:2000/CHEQUE_PAGE/getAllAmount',
+                dataType: 'json'
+            }).done(function(data) {
+                var ChequeAmount = new Intl.NumberFormat('en-IN', {
+                    style: 'currency',
+                    currency: 'INR'
+                }).format(data.v[0].Amount);
+                var Bank_Transfer_Amount = new Intl.NumberFormat('en-IN', {
+                    style: 'currency',
+                    currency: 'INR'
+                }).format(data.data[0].Amount);
+                var TotalAmount = new Intl.NumberFormat('en-IN', {
+                    style: 'currency',
+                    currency: 'INR'
+                }).format(data.data[0].Amount + data.v[0].Amount);
+                var ChequeGST_CALULATE = (data.v[0].Amount * 18) / 100;
+                var BankGST_CALULATE = (data.data[0].Amount * 18) / 100;
+
+                document.getElementById('totalamount(cheque+bank)').innerHTML = "Total Amount (Cheque+Bank)<br>" + TotalAmount;
+                document.getElementById('totalbanktransferamount').innerHTML = "Total Bank Transfer Amount<br>" + Bank_Transfer_Amount;
+                document.getElementById('totalchequeamount').innerHTML = "Total Cheque Amount<br>" + ChequeAmount;
+                document.getElementById('banktransfergstamount').innerHTML = "Total Bank Transfer GST Amount<br>" + new Intl.NumberFormat('en-IN', {
+                    style: 'currency',
+                    currency: 'INR'
+                }).format(BankGST_CALULATE);
+                document.getElementById('chequegstamount').innerHTML = "Total Cheque GST Amount<br>" + new Intl.NumberFormat('en-IN', {
+                    style: 'currency',
+                    currency: 'INR'
+                }).format(ChequeGST_CALULATE);
+                document.getElementById('totalgstamount').innerHTML = "Total GST Amount<br>" + new Intl.NumberFormat('en-IN', {
+                    style: 'currency',
+                    currency: 'INR'
+                }).format(ChequeGST_CALULATE + BankGST_CALULATE);
+            })
+            .fail(function(jqXHR, textstatus, err) {});
+    </script>
+
+</body>
+
+</html>

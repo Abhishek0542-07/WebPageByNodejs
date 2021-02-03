@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Administrative Panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/stylesheet/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheet/fontawesome-free-5.15.1-web/css/all.min.css">
+
+    <style>
+        body {
+            margin: 0;
+            width: 100vw;
+            background-image: url("/imagepath/adminpage.jpg");
+            object-fit: cover;
+        }
+        
+        #showOptionLoginRegister {
+            position: absolute;
+            top: 47%;
+            left: 47%;
+            width: 36em;
+            height: 18em;
+            margin-top: -9em;
+            border-radius: 20px;
+            margin-left: -15em;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 17px;
+            background-color: #3786a400;
+            box-shadow: 0px 0px 5px 3px #80f5bf;
+        }
+        
+        #showOptionLoginRegister:hover {
+            background-color: #1b943ff7;
+        }
+        
+        #showOptionLoginRegister #LoginPasswordid {
+            background-color: transparent;
+            font-size: 28px;
+            height: 7vh;
+            margin-top: calc(26vh/2);
+            font-weight: bold;
+            outline: none;
+            font-weight: bold;
+            color: white;
+            border-color: transparent;
+            box-shadow: 0px 0px 0px transparent;
+            -webkit-box-shadow: 0px 0px 0px transparent;
+            -moz-box-shadow: 0px 0px 0px transparent;
+        }
+        
+        #showOptionLoginRegister #Registerid {
+            background-color: transparent;
+            font-size: 28px;
+            height: 7vh;
+            margin-top: calc(26vh/2);
+            font-weight: bold;
+            outline: none;
+            font-weight: bold;
+            color: white;
+            border-color: transparent;
+            box-shadow: 0px 0px 0px transparent;
+            -webkit-box-shadow: 0px 0px 0px transparent;
+            -moz-box-shadow: 0px 0px 0px transparent;
+        }
+        
+        #showOptionLoginRegister button:hover {
+            color: #cdb30c;
+            box-shadow: 0px 0px 0px transparent;
+            -webkit-box-shadow: 0px 0px 0px transparent;
+            -moz-box-shadow: 0px 0px 0px transparent;
+        }
+        
+        u {
+            color: white;
+        }
+        
+        u:hover {
+            color: #83dd19;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrapper">
+        <main>
+            <div id="showOptionLoginRegister">
+                <button type="submit" class="btn btn-primary" id="LoginPasswordid" title="Admin Enter" onclick="loginload();"><i class="fa fa-user" aria-hidden="true"></i> <u>Admin </u></button>
+                <button type="submit" class="btn btn-primary" id="Registerid" title="User Enter" onclick="Registrationload();"><i class="fas fa-sign-in-alt"></i> <u>User</u></button>
+            </div>
+        </main>
+    </div>
+    <script type="text/javascript" src="/stylesheet/jquery/dist/jquery.min.js"></script>
+    <script>
+        function loginload() {
+            window.location = "/mainpage/AdministrativePanel/ADDONPANEL.html";
+        }
+
+        function Registrationload() {
+            window.location = "/mainpage/AdministrativePanel/UserRegistrationPage/UserSelectionPage.html";
+        }
+    </script>
+</body>
+
+</html>

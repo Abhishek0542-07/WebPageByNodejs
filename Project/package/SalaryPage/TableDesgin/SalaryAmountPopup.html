@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <style>
+        #Maincard {
+            display: block;
+            width: 100%;
+            margin: auto;
+            height: 100%;
+            border-radius: 10px;
+            background-color: #32605c;
+        }
+        
+        #Maincard .column_card {
+            display: grid;
+            height: 82%;
+            grid-template-columns: repeat(5, 1fr);
+            padding: 17px;
+            gap: 22px;
+        }
+        
+        .card {
+            background-image: linear-gradient(45deg, black, #46557d9c);
+            border: 1px solid rgba(0, 0, 0, .125);
+            border-radius: .7rem;
+            border-width: 15px;
+            text-decoration: none;
+            box-shadow: 0px 0px 14px 4px white;
+        }
+        
+        #Maincard .column_card h5 {
+            color: white;
+            height: 50%;
+            margin-top: 43%;
+            font-size: 23px;
+            font-family: monospace;
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        #Maincard .column_card i {
+            color: black;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="Maincard">
+        <h5 style="font-size: 27px;
+        font-weight: bold;
+        padding: 14px;
+        background-image: linear-gradient(45deg, #e60c0c, #1c80c2f5);
+        text-align: center;
+        justify-content: center;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;"> Amount Panel</h5>
+        <div class="column_card">
+            <div class="card">
+                <h5 id="totalbanktransferamount">Total Salary of Month <br><i class="fas fa-rupee-sign"></i>
+                </h5>
+            </div>
+
+            <div class="card">
+                <h5 id="totalchequeamount">Total Convenience Amount <br><i class="fas fa-rupee-sign"></i>
+                </h5>
+            </div>
+
+            <div class="card">
+                <h5 id="totalamount(cheque+bank)">Total Maintanance Amount<br>
+                    <i class="fas fa-rupee-sign"></i>
+                </h5>
+            </div>
+
+            <div class="card">
+                <h5 id="banktransfergstamount">Total Advance Amount<br><i class="fas fa-rupee-sign"></i></h5>
+            </div>
+
+            <div class="card">
+                <h5 id="chequegstamount">Total Paid Amount<br><i class="fas fa-rupee-sign"></i></h5>
+            </div>
+
+        </div>
+
+        <script>
+            $.ajax({
+                    type: 'GET',
+                    url: 'http://localhost:2000/SALARY_PAGE/getAllAmount',
+                    dataType: 'json'
+                }).done(function(data) {
+
+                    document.getElementById('totalamount(cheque+bank)').innerHTML = "Total Salary of Month<br>" + new Intl.NumberFormat('en-IN', {
+                        style: 'currency',
+                        currency: 'INR'
+                    }).format(data[0]);
+                    document.getElementById('totalbanktransferamount').innerHTML = "Total Convenience Amount<br>" + new Intl.NumberFormat('en-IN', {
+                        style: 'currency',
+                        currency: 'INR'
+                    }).format(data[1]);
+                    document.getElementById('totalchequeamount').innerHTML = "Total Maintanance Amount<br>" + new Intl.NumberFormat('en-IN', {
+                        style: 'currency',
+                        currency: 'INR'
+                    }).format(data[2]);
+                    document.getElementById('banktransfergstamount').innerHTML = "Total Advance Amount<br>" + new Intl.NumberFormat('en-IN', {
+                        style: 'currency',
+                        currency: 'INR'
+                    }).format(data[3]);
+                    document.getElementById('chequegstamount').innerHTML = "Total Paid Amount<br>" + new Intl.NumberFormat('en-IN', {
+                        style: 'currency',
+                        currency: 'INR'
+                    }).format(data[4]);
+                })
+                .fail(function(jqXHR, textstatus, err) {});
+        </script>
+
+</body>
+
+</html>

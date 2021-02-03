@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>User Registration Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/asset/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheet/fontawesome-free-5.15.1-web/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/mainpage/AdministrativePanel/UserRegistrationPage/UserRegistrationPagecss.css">
+</head>
+
+<body>
+    <div class="MainDivRegistration">
+        <div class="ResponsiveDiv">
+            <div class="centerdiv">
+                <h5>User Create Account</h5>
+                <div class="col-sm">
+                    <label for="inputAddress">Comapany Name *</label>
+                    <input type="text" class="form-group" id="companyname" placeholder="Enter Company Name " autocomplete="off" required>
+                </div>
+                <div class="col-sm">
+                    <label for="inputAddress">Email Id *</label>
+                    <input type="text" class="form-group" id="Emailid" placeholder="Enter Email id" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>
+                </div>
+                <div class="col-sm">
+                    <label for="inputAddress">Password *</label>
+                    <input type="Password" class="form-group" id="Passwordid" placeholder="Enter Password" required>
+                    <i class="fas fa-eye-slash" title="Show/Hide Password" id="togglePassword" onclick="changehideshow();"></i>
+                </div>
+                <div class="col-sm">
+                    <label for="inputAddress">Repeat Password *</label>
+                    <input type="Password" class="form-group" id="RepeatPasswordid" placeholder="Enter Repeat Password" required>
+                </div>
+
+                <div class="column">
+                    <button type="submit" class="btn btn-primary" id="forgetpasswordid" title="Forget Password button" onclick="forgetPasswordload();" href=""><u>Forget Password</u></button>
+                </div>
+                <div class="form-group" id="buttonid">
+                    <button type="submit" class="btn btn-primary" id="Registerid" title="Save button" onclick="Savedata(this);">Register</button>
+                </div>
+                <div class="col-sm1">
+                    <label>Have already account ?</label>
+                    <button type="submit" class="btn btn-primary" id="loginid" title="Save button" onclick="flipcard();"><u>Login here</u></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/stylesheet/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/mainpage/AdministrativePanel/EmailValidation/Validation.js"></script>
+
+    <script>
+        function flipcard() {
+
+            window.location = "/mainpage/AdministrativePanel/UserLoginPage/UserLoginPage.html";
+        }
+
+        function forgetPasswordload() {
+            window.location = "/mainpage/AdministrativePanel/ForgetPassword/UserForgetPs/UserForgetPassword.html";
+        }
+
+        function changehideshow() {
+            var inputpassword = document.getElementById('Passwordid'),
+                icon = document.getElementById('togglePassword');
+            var inputRepeatpassword = document.getElementById('RepeatPasswordid');
+
+            icon.onclick = function() {
+                if (inputpassword.className == 'active') {
+                    inputpassword.setAttribute('type', 'text');
+                    icon.className = 'fas fa-eye';
+                    inputpassword.className = '';
+                } else {
+                    inputpassword.setAttribute('type', 'password');
+                    icon.className = 'fas fa-eye-slash';
+                    inputpassword.className = 'active';
+                }
+                if (inputRepeatpassword.className == 'active') {
+                    inputRepeatpassword.setAttribute('type', 'text');
+                    inputRepeatpassword.className = '';
+                } else {
+                    inputRepeatpassword.setAttribute('type', 'password');
+                    inputRepeatpassword.className = 'active';
+                }
+            }
+        }
+
+        function Savedata(buttonid) {
+            var companyname = document.getElementById("companyname").value;
+            var email = document.getElementById("Emailid").value;
+            var password = document.getElementById("Passwordid").value;
+            var repeatpassword = document.getElementById("RepeatPasswordid").value;
+
+            if (companyname != '' && email != '' && password != '' && repeatpassword != '') {
+                if (password == repeatpassword) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: "http://localhost:2000/USER_REGISTARTION/SEND_DATA_LOGIN",
+                        data: {
+                            companyname: companyname,
+                            email: email,
+                            password: password,
+                            repeatpassword: repeatpassword,
+                            insertdatetime: (new Date().toDateString() + " " + new Date().toLocaleTimeString())
+                        },
+                        success: function(data) {
+                            alert(data);
+                            refreshtable();
+                        },
+                        error: function(jqXHR, textStatus, err) {
+                            alert('text status ' + textStatus + ', err ' + err)
+                        }
+                    });
+                } else {
+                    alert("Not same Password");
+                }
+            } else {
+                alert("Any input box empty");
+            }
+        }
+        $('form').bind("keypress", function(e) {
+            if (e.keyCode == 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/mainpage/ExpensesPage/ImportExceltoDb/css/impportcss.css">
+</head>
+
+<body>
+    <div class="form-popup" id="importpopupid">
+        <form action="" id="addopeningamountpopup" onsubmit="return false">
+
+            <div class="form-group" id="optionselect">
+                <select id="selectmonthid">
+      </select>
+                <select id="selectyearid">
+      </select>
+
+                <input type="number" class="form-control" id="openingamountid" placeholder="Enter Opening Amount">
+                <input type="file" class="btn btn-primary" id="savedataid" accept=".xls,.xlsx">
+                <button type="button" class="btn btn-primary" id="uploaddata" onclick="insertdb(this);">Upload</button>
+                <button type="button" class="btn btn-primary" id="closeFormpopup" onclick="closeForm()"><i class="fas fa-times" title="Close popup"></i></button>
+            </div>
+
+            <div id="tabledivimport">
+                <table class="table-responsive" id="importpopuptable">
+                    <thead>
+                        <tr>
+                            <th scope="col">Sr.No.</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Method of D/C/CH</th>
+                            <th scope="col">Paid to</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Debit</th>
+                            <th scope="col">Credit</th>
+                            <th scope="col">Balance</th>
+                            <th scope="col">SubTitle</th>
+                        </tr>
+                    </thead>
+                    <tbody id="importtbodyid">
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+
+
+    <script>
+        var months = new Array(12);
+        months[0] = "January";
+        months[1] = "February";
+        months[2] = "March";
+        months[3] = "April";
+        months[4] = "May";
+        months[5] = "June";
+        months[6] = "July";
+        months[7] = "August";
+        months[8] = "September";
+        months[9] = "October";
+        months[10] = "November";
+        months[11] = "December";
+
+        var current_date = new Date();
+        month_value = current_date.getMonth();
+        year_value = current_date.getFullYear();
+
+        var idofmonth = document.getElementById("selectmonthid");
+        for (var i = 0; i < months.length; i++) {
+            idofmonth.add(new Option(months[i], months[i]));
+        }
+        setSelectValues("selectmonthid", months[month_value]);
+        var idofyear = document.getElementById("selectyearid");
+        for (var i = 1996; i < 2040; i++) {
+            idofyear.add(new Option(i, i));
+        }
+        setSelectValues("selectyearid", year_value);
+
+        function setSelectValues(id, val) {
+            document.getElementById(id).value = val;
+        }
+
+
+        $("#selectyearid")
+            .change(function() {
+                $("#selectyearid option:selected").each(function() {
+                    var startloop = 0;
+                    if (month_value == 0) {
+                        startloop = 2;
+                    } else {
+                        startloop = month_value;
+                    }
+                    var m = document.getElementById("selectmonthid");
+                    var month = m.options[m.selectedIndex].text;
+                    var y = document.getElementById("selectyearid");
+                    var year = y.options[y.selectedIndex].text;
+
+                    if (year <= year_value) {
+                        for (let index = 0; index < months.length; index++) {
+                            document.getElementById("selectmonthid").options[index].disabled = false;
+                        }
+                    } else {
+                        for (let index = 0; index < months.length; index++) {
+                            document.getElementById("selectmonthid").options[index].disabled = true;
+                        }
+                    }
+                });
+            }).change();
+    </script>
+    <script>
+        function showpopup() {
+            document.getElementById("importpopupid").style.display = "flex";
+        }
+
+        function closeForm() {
+            document.getElementById("importpopupid").style.display = "none";
+        }
+        var arradata = {};
+        var columns = [];
+        var sr_no = [];
+        var getDate = [];
+        var getMethodofPayment = [];
+        var getPaidTo = [];
+        var getDescription = [];
+        var getDebitAmount = [];
+        var getCreditAmount = [];
+        var getBalance = [];
+        var getSubTitle = [];
+
+        var ExcelToJSON = function() {
+            this.parseExcel = function(file) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    var data = e.target.result;
+                    var workbook = XLSX.read(data, {
+                        type: 'binary'
+                    });
+                    workbook.SheetNames.forEach(function(sheetName) {
+                        var XL_row_object = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+
+                        arradata = JSON.stringify(XL_row_object);
+                        BindTable(JSON.parse(arradata), '#importtbodyid');
+
+                        var testval = JSON.parse(arradata);
+                        for (var i = 0; i < testval.length; i++) {
+                            sr_no.push(testval[i][columns[0]]);
+                            getDate.push(testval[i][columns[1]]);
+                            getMethodofPayment.push(testval[i][columns[2]]);
+                            getPaidTo.push(testval[i][columns[3]]);
+                            getDescription.push(testval[i][columns[4]]);
+                            getDebitAmount.push(testval[i][columns[5]]);
+                            getCreditAmount.push(testval[i][columns[6]]);
+                            getBalance.push(testval[i][columns[7]]);
+                            getSubTitle.push(testval[i][columns[8]]);
+                        }
+                    })
+                };
+                reader.onerror = function(ex) {
+                    console.log(ex);
+                };
+                reader.readAsBinaryString(file);
+            };
+        };
+
+        function BindTable(jsondata, tableid) {
+            columns = BindTableHeader(jsondata, tableid);
+            for (var i = 0; i < jsondata.length; i++) {
+                var row$ = $('<tr/>');
+                for (var colIndex = 0; colIndex < columns.length; colIndex++) {
+                    var cellValue = jsondata[i][columns[colIndex]];
+                    if (cellValue == null)
+                        cellValue = "";
+                    row$.append($('<td/>').html(cellValue));
+                }
+                SubTitlevalarray = row$;
+                $(tableid).append(row$);
+            }
+        }
+
+        function BindTableHeader(jsondata, tableid) {
+            var columnSet = [];
+            var headerTr$ = $('<tr/>');
+            for (var i = 0; i < jsondata.length; i++) {
+                var rowHash = jsondata[i];
+                for (var key in rowHash) {
+                    if (rowHash.hasOwnProperty(key)) {
+                        if ($.inArray(key, columnSet) == -1) {
+                            columnSet.push(key);
+                            headerTr$.append($('<th/>').html(key));
+                        }
+                    }
+                }
+            }
+            return columnSet;
+        }
+
+        function handleFileSelect(evt) {
+            var files = evt.target.files;
+            var xl2json = new ExcelToJSON();
+            xl2json.parseExcel(files[0]);
+        }
+    </script>
+    <script>
+        function insertdb(id) {
+            var valuetext = document.getElementById("openingamountid").value;
+            var m = document.getElementById("selectmonthid");
+            var month = m.options[m.selectedIndex].text;
+            var y = document.getElementById("selectyearid");
+            var year = y.options[y.selectedIndex].text;
+            var today = new Date();
+            var startDate = moment(year + '-' + getMonthNumber(month) + '-' + 1 + ' 00:00:00');
+            var dateMomentObject = moment(startDate, "YYYY-MM-DD").format("DD/MM/YYYY");
+
+            if (valuetext != '') {
+
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:2000/ExpensesImportExcelToDB/ImportExceltoDB",
+                    data: {
+                        id: sr_no,
+                        Textvalue: valuetext,
+                        StartingDate: dateMomentObject,
+                        GetDate: getDate,
+                        GetMethodofPayment: getMethodofPayment,
+                        GetPaidTo: getPaidTo,
+                        GetDescription: getDescription,
+                        GetDebitAmount: getDebitAmount,
+                        GetCreditAmount: getCreditAmount,
+                        GetBalance: getBalance,
+                        GetSubTitle: getSubTitle,
+                        insertdatetime: (new Date().toDateString() + " " + new Date().toLocaleTimeString()),
+                        month: month,
+                        year: year
+                    },
+                    success: function(data) {
+                        alert("All Data insert in Db");
+                    },
+                    error: function(jqXHR, textStatus, err) {
+                        alert('text status ' + textStatus + ', err ' + err)
+                    }
+                });
+            } else {
+                alert("Text fill value" + valuetext);
+            }
+        }
+
+        function getMonthNumber(month) {
+            var months = [
+                'January',
+                'February',
+                'March',
+                'April',
+                'May',
+                'June',
+                'July',
+                'August',
+                'September',
+                'October',
+                'November',
+                'December'
+            ];
+            for (var i = 1; i < months.length + 1; i++) {
+                if (months[i] == month) {
+                    return i + 1;
+                }
+            }
+            return 0;
+        }
+        document.getElementById('savedataid').addEventListener('change', handleFileSelect, false);
+    </script>
+
+</body>
+
+</html>

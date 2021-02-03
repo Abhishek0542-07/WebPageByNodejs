@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Salary Table</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .SALARY_MAIN_TABEL_DIV {
+            width: 99vw;
+            height: 52.5vh;
+            border-radius: 1rem;
+            display: flow-root;
+            background-color: #185748;
+            box-shadow: rgb(0 0 0) 0px 0px 7px 2px;
+            overflow-x: scroll;
+            overflow-y: hidden;
+        }
+        
+        .HeaderDIV {
+            width: calc((12.5vw*12));
+            justify-items: center;
+            display: flex;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            background-color: #006bda;
+        }
+        
+        .TableBody {
+            width: 99vw;
+            height: 46vh;
+            display: grid;
+        }
+        
+        .table-responsive {
+            display: grid;
+            justify-content: center;
+            overflow: unset;
+        }
+        
+        .col {
+            width: 14vw;
+            margin-left: 4px;
+            text-align: -webkit-match-parent;
+        }
+        
+        .col1 {
+            width: 7.11vw;
+            text-align: -webkit-match-parent;
+        }
+        
+        .col2 {
+            width: 10vw;
+            padding: 0;
+            margin: auto;
+            text-decoration: none;
+            list-style: none;
+        }
+        
+        .col3 {
+            width: 10vw;
+        }
+        
+        .col4 {
+            width: 11vw;
+        }
+        
+        .col5 {
+            width: 10vw;
+        }
+        
+        .col6 {
+            width: 10vw;
+        }
+        
+        .HeaderDIV .table-responsive tr {
+            color: aliceblue;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            padding: 5px;
+            white-space: nowrap;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        
+        .TableBody .table-responsive tr {
+            color: white;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            padding: 5px;
+            background: #394a63;
+            white-space: nowrap;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        
+        .TableBody .table-responsive tr:nth-child(even) {
+            background-color: white;
+            color: black;
+        }
+        
+        .TableBody .table-responsive i {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="SALARY_MAIN_TABEL_DIV">
+        <div class="HeaderDIV">
+            <table class="table-responsive" id="expensestable">
+                <thead>
+                    <tr>
+                        <th class="col1">Sr.No.</th>
+                        <th class="col1">Date</th>
+                        <th class="col">Employes Name</th>
+                        <th class="col">Designation</th>
+                        <th class="col">Salary of Month</th>
+                        <th class="col">Convenience Date</th>
+                        <th class="col">Convenience Amount</th>
+                        <th class="col">Maintanance Amount</th>
+                        <th class="col">Advance Amount</th>
+                        <th class="col">Total Salary Month</th>
+                        <th class="col">Method of Status</th>
+                        <th class="col1">Action</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="TableBody">
+            <table class="table-responsive" id="trtableid">
+                <tbody id="Tbody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        $.ajax({
+                type: 'GET',
+                url: 'http://localhost:2000/SALARY_PAGE/user-list',
+                dataType: 'json'
+            }).done(function(data) {
+                for (let index = 0; index < Object.keys(data).length; index++) {
+
+                    $('#Tbody').append('<tr><td class="col1">' + data[index].PRIMARY_KEY + '</td><td class="col1">' +
+                        data[index].DateofInsert + '</td><td class="col">' + data[index].EMPLOYES_NAME +
+                        '</td><td class="col">' + data[index].Desgination + '</td><td class="col">' + data[index].Salary_of_Month +
+                        '</td><td class="col">' + data[index].Convence_Received_Date + '</td> <td class="col">' + data[index].Convence_Amount +
+                        '</td><td class="col">' + data[index].Maintance_Amount + '</td>' + '<td class="col">' + data[index].Advance_Amount + '</td>' +
+                        '<td class="col">' + data[index].Total_Salary_Month + '</td><td class="col">' + data[index].Method_of_Status +
+                        '</td><td class="col1"><i class="fa fa-edit edittable" title="Edit of Table : row : ' + data[index].PRIMARY_KEY + '"  onclick="salaryedit(this)"></i> ' +
+                        '<i class="fa fa-trash" title="Delete of Table : row :   "' + data[index].PRIMARY_KEY + '"   onclick="salaryedit(this)"></i></td></tr>');
+                }
+                // hidecolumn(6, 12, 10);
+            })
+            .fail(function(jqXHR, textstatus, err) {});
+
+        function hidecolumn(startloop, endloop, WHICH_COLUMN_NO_HIDE) {
+            for (let index = startloop; index < endloop; index++) {
+                if (WHICH_COLUMN_NO_HIDE == index) {
+                    $('#trtableid').find("tbody tr").children(":nth-child(" + index + ")").show();
+                    $('#expensestable').find("thead tr").children(":nth-child(" + index + ")").show();
+                } else {
+                    $('#trtableid').find("tbody tr").children(":nth-child(" + index + ")").hide();
+                    $('#expensestable').find("thead tr").children(":nth-child(" + index + ")").hide();
+                }
+            }
+        }
+    </script>
+    <script>
+    </script>
+</body>
+
+</html>

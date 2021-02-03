@@ -1,0 +1,4 @@
+.vscode
+*.nc
+*.DS_store
+node_modules

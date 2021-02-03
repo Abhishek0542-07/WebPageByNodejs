@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="/asset/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/fontawesome-free-5.15.1-web/css/all.min.css"> 
+	<title></title>
+	<style>
+		#lineChart
+		{
+			width: 90vw !important;
+		    height: 73vh !important;
+		    font-size: 22px;
+		    font-weight: bold;
+		}
+	</style>
+</head>
+<body>
+<canvas id="lineChart"></canvas>
+<script type="text/javascript" src="/ChartJS/chart.js/dist/Chart.min.js"></script>
+<script>
+	//line
+  var OBJECT_OF_DETAILS={};
+  var  EXPENSES_AMOUNT_ARRAY=new Array();
+  var  INCOME_AMOUNT_ARRAY=new Array();
+
+  var xhr=new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200)
+  {    
+        var GETRESPONSETEXT=this.responseText;
+        OBJECT_OF_DETAILS=JSON.parse(GETRESPONSETEXT);
+        var EXPENSE_OBJECT_CONVERT_JSON=[OBJECT_OF_DETAILS.EXPENSES_AMOUNT];
+        var INCOME_OBJECT_CONVERT_JSON=[OBJECT_OF_DETAILS.INCOME_AMOUNT];
+
+        for (var i = 0;i<EXPENSE_OBJECT_CONVERT_JSON.length; i++) 
+        {
+        	EXPENSES_AMOUNT_ARRAY.push(EXPENSE_OBJECT_CONVERT_JSON[i]);
+
+        	INCOME_AMOUNT_ARRAY.push(INCOME_OBJECT_CONVERT_JSON[i]);
+        	chartDesgin();
+        }
+     }
+   };
+   var filepath="../DashBoardPage/DBGETDATA/MonthlyEXPENSE_DB.php";
+   xhr.open("POST",filepath);
+   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+   xhr.send();
+function chartDesgin()
+{
+
+var ctxL = document.getElementById("lineChart").getContext('2d');
+var myLineChart = new Chart(ctxL, 
+{
+type: 'line',
+data: 
+{
+labels:OBJECT_OF_DETAILS.MONTH,
+datasets: [{
+label: "Monthly Expense",
+data:EXPENSES_AMOUNT_ARRAY,
+backgroundColor: [
+'rgba(105, 0, 132, .2)',
+],
+borderColor: [
+'rgba(200, 99, 132, .7)',
+],
+borderWidth: 2
+},
+{
+label: "Monthly Income",
+data:INCOME_AMOUNT_ARRAY,
+backgroundColor: [
+'rgba(0, 137, 132, .2)',
+],
+borderColor: [
+'rgba(0, 10, 130, .7)',
+],
+borderWidth: 2
+}
+]
+},
+options: {
+responsive: true
+}
+});
+}
+</script>
+</body>
+</html>

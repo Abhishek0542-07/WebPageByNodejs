@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="/mainpage/DashBoardPage/css/DashBoardCss.css">
+</head>
+
+<body>
+    <div id="MainDashboardid">
+
+        <div id="NavBardivid" style="float:left;">
+
+            <div class="collapse navbar-collapse" id="dashboardnavbarSupportedContent">
+                <button type="submit" class="btn btn-primary" id="Expensesid" onclick="">Expenses</button>
+                <button type="submit" class="btn btn-primary" id="Incomeid" onclick="">Income</button>
+                <button type="submit" class="btn btn-primary" id="OfficeMaterialid" onclick="">Office Material</button>
+                <button type="submit" class="btn btn-primary" id="EmployesDetailsid" onclick="">Employes Details</button>
+            </div>
+        </div>
+
+        <div id="load_pageExpenses" style="float: right;">
+        </div>
+    </div>
+
+    <script>
+        var expenesmonthly = $("#Expensesid");
+        var pageloadid = $("#load_pageExpenses");
+
+        expenesmonthly.click(function(e) {
+            $("#load_pageExpenses").empty();
+            pageloadid.load("/mainpage/DashBoardPage/desgin/MonthlyExprnses.html");
+        });
+    </script>
+</body>
+
+</html>

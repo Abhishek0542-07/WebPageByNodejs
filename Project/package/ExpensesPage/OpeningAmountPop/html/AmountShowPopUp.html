@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        #amountpopupshowid {
+            display: flex;
+            position: fixed;
+            bottom: 0;
+            right: 15px;
+            width: 20vw;
+            height: 30vh;
+            z-index: 1;
+            border-radius: 10px;
+            top: 35%;
+            left: 35vw;
+            background-color: #3d56e0;
+            box-shadow: 0px -1px 8px 5px #0e7b7e;
+        }
+        
+        #amountpopupshowid #addopeningamountpopup {
+            display: grid;
+            width: 100%;
+        }
+        
+        #amountpopupshowid #addopeningamountpopup h5 {
+            text-align: center;
+            color: white;
+            font-size: 24px;
+            height: 13vh;
+        }
+        
+        #amountpopupshowid #addopeningamountpopup #Closebtn {
+            width: 0%;
+            margin-left: 17vw;
+            height: 0%;
+            margin-top: 0rem;
+            text-align: center;
+            background: transparent;
+            outline: none;
+            border: none;
+        }
+        
+        #amountpopupshowid #addopeningamountpopup #Closebtn:focus {
+            outline: none;
+            box-shadow: none;
+        }
+        
+        #amountpopupshowid #addopeningamountpopup #Closebtn i {
+            font-size: 22px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-popup" id="amountpopupshowid">
+        <form action="" id="addopeningamountpopup" onsubmit="return false">
+            <button type="button" class="btn btn-primary" id="Closebtn" title="Close Button" onclick="closepop()"><i class="fas fa-window-close"></i></button>
+            <h5 id="ShowAmountinId">Add Opening Amount</h5>
+        </form>
+    </div>
+
+    <script>
+        $.ajax({
+                type: 'GET',
+                url: 'http://localhost:2000/expensespage/getOpeningAmountShow',
+                dataType: 'json'
+            }).done(function(data) {
+                console.log("hellooo" + data.TEXT_VALUES);
+                var CURRENT_AMOUNT = new Intl.NumberFormat('en-IN', {
+                    style: 'currency',
+                    currency: 'INR'
+                }).format(data.Amount);
+                document.getElementById("ShowAmountinId").innerHTML = data.TEXT_VALUES + "<br>" + CURRENT_AMOUNT;
+            })
+            .fail(function(jqXHR, textstatus, err) {});
+
+        function closepop() {
+            document.getElementById("amountpopupshowid").style.display = "none";
+        }
+    </script>
+</body>
+
+</html>

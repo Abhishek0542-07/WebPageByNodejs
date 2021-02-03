@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>SurerLink Internet Page</title>
+    <link rel="stylesheet" type="text/css" href="/stylesheet/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheet/fontawesome-freemm-5.15.1-web/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/mainpage/MainPageStylesheetcss/mainpage.css">
+</head>
+
+<body id="bodyid">
+    <nav>
+        <input type="checkbox" id="check">
+        <label for="check" class="checkbtn">
+            <i class="fas fa-bars"></i>
+        </label>
+        <label class="companytitle">SureLink Internet</label>
+        <ul>
+            <li>
+                <a href="#" class="active" id="dash">Dashboard</a>
+            </li>
+            <li>
+                <a href="#" id="expenses">Expense</a>
+            </li>
+            <li>
+                <a href="#" id="cheque">Cheque</a>
+            </li>
+            <li>
+                <a href="#" id="salary">Salary</a>
+            </li>
+            <li>
+                <a href="#" id="office_material">Office Meterial</a>
+            </li>
+            <li>
+                <a class="form-control mr-sm-2" id="Signid" onclick="Logout()" title="logout page"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </li>
+        </ul>
+    </nav>
+    <div id="load_page" class="load_doc">
+    </div>
+    <script type="text/javascript" src="/stylesheet/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/stylesheet/js/bootstrap.min.js"></script>
+    <script src="/stylesheet/momentjs/DateFormat.js"></script>
+    <script src="/stylesheet/xlsx/dist/xlsx.core.min.js"></script>
+    <script src="/stylesheet/xlsx/dist/xlsx.js"></script>
+
+    <script>
+        var dash = $("#dash");
+        var expense = $("#expenses");
+        var cheque = $("#cheque");
+        var salary = $("#salary");
+        var pageloaderdiv = $("#load_page");
+
+        $(document).ready(function() {
+            $("#load_page").empty();
+            pageloaderdiv.load("/mainpage/DashBoardPage/Html/DashBoardPage.html");
+        });
+        dash.click(function(e) {
+            $("#load_page").empty();
+            pageloaderdiv.load("/mainpage/DashBoardPage/Html/DashBoardPage.html");
+        });
+        expense.click(function(e) {
+            $("#load_page").empty();
+            pageloaderdiv.load("/mainpage/ExpensesPage/htmlpage/ExpensesPage.html");
+        });
+        cheque.click(function(e) {
+            $("#load_page").empty();
+            pageloaderdiv.load("/mainpage/ChequePage/html/ChequePage.html");
+        });
+        salary.click(function(e) {
+            $("#load_page").empty();
+            pageloaderdiv.load("/mainpage/SalaryPage/html/SalaryPage.html");
+        });
+        $('li a').click(function(e) {
+            e.preventDefault();
+            $('a').removeClass('active');
+            $(this).addClass('active');
+            // $('ul').hide();
+        });
+        $('#check').click(function(e) {
+            $('ul').show();
+        });
+    </script>
+    <script>
+        function Logout() {
+            $.ajax({
+                    type: 'GET',
+                    url: 'http://localhost:2000/ADMIN_REGISTARTION/AdminlogoutPage',
+                    dataType: 'json'
+                }).done(function(data) {
+                    if (data == true) {
+                        document.getElementById('bodyid').style.display = "none";
+                        window.location = "/mainpage/AdministrativePanel/SELECT_PANEL.html";
+                    }
+                })
+                .fail(function(jqXHR, textstatus, err) {});
+
+        }
+
+        function setCookie(name, value, expirydays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (expirydays * 24 * 60 * 60 * 1000));
+            var expires = "expires=" + d.toUTCString();
+            document.cookie = name + "=" + value + "; " + expires;
+        }
+
+        function deleteCookie(name) {
+            setCookie(name, "", -1);
+        }
+    </script>
+    <script>
+        document.getElementById('bodyid').style.display = "none";
+        if (getCookieValue('username') != '' && getCookieValue('password') != '') {
+            document.getElementById('bodyid').style.display = "block";
+        } else {
+            document.getElementById('bodyid').style.display = "none";
+            window.location = "/mainpage/AdministrativePanel/select_panel.html";
+        }
+
+        function getCookieValue(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+    </script>
+</body>
+
+</html>

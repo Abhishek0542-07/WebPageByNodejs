@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>CHeque Page</title>
+    <link rel="stylesheet" type="text/css" href="/mainpage/ChequePage/css/ChequePagecss.css">
+</head>
+
+<body>
+    <form action="" id="Chequeformid" onsubmit="return false">
+        <div id="itemsdiv">
+            <div class="form-group">
+                <label for="inputAddress">Date of Payment  *</label>
+                <input type="text" class="form-control" id="dateinput" placeholder="Enter Date" autocomplete="off" onclick="showpopCalender('#dateinput');">
+            </div>
+            <div class="form-group">
+                <label for="inputAddress">Customer Name *</label>
+                <input type="text" class="form-control" id="CustomerName" placeholder="Enter Customer Name"></div>
+
+            <div class="form-group">
+                <label for="inputAddress">Bank Name *</label>
+                <input type="text" class="form-control" id="BankName" placeholder="Enter Bank Name"></div>
+            <div class="form-group">
+                <label for="inputAddress">Bank Transfer Amount *</label>
+                <input type="number" class="form-control" id="Bank_Transfer_Amount" placeholder="Enter Bank Transfer Amount" required>
+            </div>
+
+            <div class="form-group">
+                <label for="inputAddress">Cheque Number *</label>
+                <input type="number" class="form-control" id="Cheuqe_No" placeholder="Enter Cheque Number" required></div>
+
+            <div classs="form-group">
+                <label for="inputAddress"> Cheque Amount *</label>
+                <input type="number" class="form-control" id="amountinput" placeholder="Enter Cheque Amount" required></div>
+            <div class="form-group">
+                <label for="inputAddress">Amount Status *</label>
+                <select class="form-control" id="amountstatus" required>
+                        <option>Select Method</option>
+                        <option>Pending</option>
+                        <option>Clear</option>
+                        <option>Bounce</option>
+                        <option>Return</option>
+                        </select>
+            </div>
+            <div class="form-group" id="buttondiv">
+                <br>
+                <button type="submit" class="btn btn-primary" id="insertbutton" title="Save button" onclick="insert(this);"><i class="fas fa-plus-circle"></i> inesrt</button>
+                <button type="submit" class="btn btn-primary" id="updatebutton" title="Update button"><i class="fas fa-sync-alt"></i> Update</button>
+                <button type="submit" class="btn btn-primary" id="importbutton" title="import button" onclick="importExceltoDB(this)"><i class="fas fa-upload"></i> Import</button>
+            </div>
+
+        </div>
+
+
+        <div id="searchdivid">
+            <input type="text" class="form-control" id="searchinputid" placeholder="Search [Name,Date,etc]" onkeyup="serach();">
+            <select id="selectmonth" onchange="refreshtable()">
+		</select>
+            <select id="selectyear" onchange="refreshtable()">
+		</select>
+
+            <div class="form-inline">
+                <button type="submit" class="btn btn-primary" id="resetbutton" title="refresh" onclick=" refreshtable();"><i class="fas fa-sync-alt"></i></button>
+                <button type="submit" class="btn btn-primary" id="backbutton" title="Back" onclick="BackPage();" style="background-color: transparent; box-shadow: none;border: none;font-size: 1.8rem;"><i class="fas fa-arrow-left" style="font-size: 15px;"></i> Back</button>
+                <button type="submit" class="btn btn-primary" id="nextbutton" title="Next" style="background-color: transparent; box-shadow: none;border: none;font-size: 1.8rem;" onclick=" NextPage();"> Next <i class="fas fa-arrow-right" style="font-size: 15px;"></i></button>
+            </div>
+        </div>
+        <div id="tablediv">
+        </div>
+        <div id="OpeningPopup"></div>
+    </form>
+
+    <script>
+        var months = new Array(12);
+        months[0] = "January";
+        months[1] = "February";
+        months[2] = "March";
+        months[3] = "April";
+        months[4] = "May";
+        months[5] = "June";
+        months[6] = "July";
+        months[7] = "August";
+        months[8] = "September";
+        months[9] = "October";
+        months[10] = "November";
+        months[11] = "December";
+
+        var current_date = new Date();
+        month_value = current_date.getMonth();
+        year_value = current_date.getFullYear();
+
+        document.getElementById("backbutton").disabled = true;
+        var idofmonth = document.getElementById("selectmonth");
+        for (var i = 0; i < months.length; i++) {
+            idofmonth.add(new Option(months[i], months[i]));
+        }
+        setSelectValues("selectmonth", months[month_value]);
+        var idofyear = document.getElementById("selectyear");
+        for (var i = 1996; i < 2040; i++) {
+            idofyear.add(new Option(i, i));
+            // $("#selectyear").find("option").addClass("SelectYearOption");
+        }
+        setSelectValues("selectyear", year_value);
+
+        function setSelectValues(id, val) {
+            document.getElementById(id).value = val;
+        }
+
+        $("#selectyear")
+            .change(function() {
+                $("#selectyear option:selected").each(function() {
+                    var startloop = 0;
+                    if (month_value == 0) {
+                        startloop = 2;
+                    } else {
+                        startloop = month_value;
+                    }
+                    var m = document.getElementById("selectmonth");
+                    var month = m.options[m.selectedIndex].text;
+                    var y = document.getElementById("selectyear");
+                    var year = y.options[y.selectedIndex].text;
+
+                    if (year <= year_value) {
+                        for (let index = 0; index < months.length; index++) {
+                            document.getElementById("selectmonth").options[index].disabled = false;
+                        }
+                    } else {
+                        for (let index = 0; index < months.length; index++) {
+                            document.getElementById("selectmonth").options[index].disabled = true;
+                        }
+                    }
+                });
+            }).change();
+
+        function setTextBoxval() {
+            var y = document.getElementById("selectsubtitlevalue");
+            if (y.options[y.selectedIndex].text != 'Select values') {
+                document.getElementById("subtitleinput").value = y.options[y.selectedIndex].text;
+            } else {
+                alert("select other option");
+            }
+        }
+
+        function methodnotequal() {
+            var y = document.getElementById("selectmethodofincome");
+            if (y.options[y.selectedIndex].text != 'Select Method') {} else {
+                alert("select other option");
+            }
+        }
+    </script>
+    <script>
+        var selectedrow = "";
+        var selectedrowid = 0;
+
+        function insert(id) {
+
+            var date = document.getElementById("dateinput").value;
+            var CustomerName = document.getElementById("CustomerName").value;
+            var Cheuqe_No = document.getElementById("Cheuqe_No").value;
+            var BankName = document.getElementById("BankName").value;
+            var Bank_Transfer_Amount = document.getElementById("Bank_Transfer_Amount").value;
+            var Cheque_Amount = document.getElementById("amountinput").value;
+
+            var am = document.getElementById("amountstatus");
+            var amountstatus = am.options[am.selectedIndex].text;
+
+            var m = document.getElementById("selectmonth");
+            var month = m.options[m.selectedIndex].text;
+            var y = document.getElementById("selectyear");
+            var year = y.options[y.selectedIndex].text;
+
+            var dateMomentObject = moment(date, "YYYY-MM-DD").format("DD/MM/YYYY");
+
+            if (CustomerName != '' && BankName != '' && Cheuqe_No != '' && date != 'dd/mm/yyy' && date != 'Enter date' && month != 'Select Month' && year != 'Select Year' && amountstatus != 'Select Method' && Cheque_Amount != '') {
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:2000/CHEQUE_PAGE/ChequeInsertData",
+                    data: {
+                        date: dateMomentObject,
+                        CustomerName: CustomerName,
+                        Cheuqe_No: Cheuqe_No,
+                        Cheque_Amount: Cheque_Amount,
+                        BankName: BankName,
+                        Bank_Transfer_Amount: Bank_Transfer_Amount,
+                        Amount_Status: amountstatus,
+                        month: month,
+                        year: year,
+                        insertdatetime: (new Date().toDateString() + " " + new Date().toLocaleTimeString())
+                    },
+                    success: function(data) {
+                        alert('Success insert data');
+                        refreshtable();
+                    },
+                    error: function(jqXHR, textStatus, err) {
+                        alert('text status ' + textStatus + ', err ' + err)
+                    }
+                });
+            } else {
+
+                alert("Please Change values.");
+            }
+        }
+
+        function updatetodb(id) {
+            var date = document.getElementById("dateinput").value;
+            var CustomerName = document.getElementById("CustomerName").value;
+            var Cheuqe_No = document.getElementById("Cheuqe_No").value;
+            var BankName = document.getElementById("BankName").value;
+            var Bank_Transfer_Amount = document.getElementById("Bank_Transfer_Amount").value;
+            var Cheque_Amount = document.getElementById("amountinput").value;
+
+
+            var am = document.getElementById("amountstatus");
+            var amountstatus = am.options[am.selectedIndex].text;
+
+            var m = document.getElementById("selectmonth");
+            var month = m.options[m.selectedIndex].text;
+            var y = document.getElementById("selectyear");
+            var year = y.options[y.selectedIndex].text;
+
+            if (CustomerName != '' && BankName != '' && Cheuqe_No != '' && date != 'dd/mm/yyy' && date != 'Enter date' && month != 'Select Month' && year != 'Select Year' && amountstatus != 'Select Method' && Cheque_Amount != '') {
+                if (selectedrowid != 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: "http://localhost:2000/CHEQUE_PAGE/UpdateData",
+                        data: {
+                            date: date,
+                            id: selectedrowid,
+                            CustomerName: CustomerName,
+                            BankName: BankName,
+                            Bank_Transfer_Amount: Bank_Transfer_Amount,
+                            Cheuqe_No: Cheuqe_No,
+                            Cheque_Amount: Cheque_Amount,
+                            amountstatus: amountstatus,
+                            month: month,
+                            year: year,
+                            updatedatetime: (new Date().toDateString() + " " + new Date().toLocaleTimeString())
+                        },
+                        success: function(data) {
+                            alert("Successfull Update data");
+                            refreshtable();
+                        },
+                        error: function(jqXHR, textStatus, err) {
+                            alert('text status ' + textStatus + ', err ' + err)
+                        }
+                    });
+                } else {
+                    alert("Table Row Not Selected");
+                }
+            } else {
+                alert("Please Change values.");
+            }
+        }
+
+        function BackPage() {
+            document.getElementById("backbutton").disabled = true;
+            document.getElementById("nextbutton").disabled = false;
+            refreshtable();
+        }
+
+        function NextPage() {
+            document.getElementById("backbutton").disabled = false;
+            document.getElementById("nextbutton").disabled = true;
+            $("#tablediv").load("/mainpage/ChequePage/layout/AmountLayout.html");
+        }
+
+        function CHEQUE_EDIT(td) {
+            selectedrow = td.parentElement.parentElement;
+            selectedrowid = selectedrow.cells[0].innerHTML;
+            var dateMomentObject = moment(selectedrow.cells[1].innerHTML, "DD/MM/YYYY").format("DD/MM/YYYY");
+            document.getElementById("dateinput").value = dateMomentObject;
+            document.getElementById("CustomerName").value = selectedrow.cells[2].innerHTML;
+            document.getElementById("Cheuqe_No").value = selectedrow.cells[3].innerHTML;
+            document.getElementById("amountinput").value = selectedrow.cells[4].innerHTML;
+            document.getElementById("BankName").value = selectedrow.cells[5].innerHTML;
+            document.getElementById("Bank_Transfer_Amount").value = selectedrow.cells[6].innerHTML;
+            document.getElementById("amountstatus").value = selectedrow.cells[7].innerHTML;
+        }
+
+        function CHEQUE_DELETE(td) {
+            var txt = "";
+            selectedrow = td.parentElement.parentElement;
+            var deleteid = selectedrow.cells[0].innerHTML;
+            var m = document.getElementById("selectmonth");
+            var month = m.options[m.selectedIndex].text;
+            var y = document.getElementById("selectyear");
+            var year = y.options[y.selectedIndex].text;
+
+            var r = confirm("You want to delete values!");
+            if (r == true) {
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:2000/CHEQUE_PAGE/ChequeDeleteData",
+                    data: {
+                        id: deleteid,
+                        month: month,
+                        year: year
+                    },
+                    success: function(data) {
+                        alert("Successfull Delete data");
+                        refreshtable();
+                    },
+                    error: function(jqXHR, textStatus, err) {
+                        alert('text status ' + textStatus + ', err ' + err)
+                    }
+                });
+            }
+        }
+
+        function addopeningamount() {
+            openForm();
+        }
+    </script>
+    <script>
+        var m = document.getElementById("selectmonth");
+        var month = m.options[m.selectedIndex].value;
+        var y = document.getElementById("selectyear");
+        var year = y.options[y.selectedIndex].value;
+
+        function refreshtable() {
+            var m = document.getElementById("selectmonth");
+            var month = m.options[m.selectedIndex].value;
+            var y = document.getElementById("selectyear");
+            var year = y.options[y.selectedIndex].value;
+            $("#tablediv").load("/mainpage/ChequePage/TableDesign/TableCheque.html");
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:2000/CHEQUE_PAGE/month-year",
+                data: {
+                    month: month,
+                    year: year
+                },
+                success: function(data) {},
+                error: function(jqXHR, textStatus, err) {
+                    alert('text status ' + textStatus + ', err ' + err)
+                }
+            });
+        }
+
+        function importExceltoDB(id) {
+            $('#OpeningPopup').load('/mainpage/ChequePage/ImportTable/html/ImportTableCheque.html');
+        }
+
+        refreshtable();
+    </script>
+    <script type="text/javascript" src="/mainpage/CalenderUI/script.js"></script>
+    <script>
+        document.getElementById("updatebutton").addEventListener("click", function() {
+            updatetodb("updatebutton");
+        });
+        addCalenderIcon('#dateinput');
+    </script>
+    <script type="text/javascript" src="/mainpage/ChequePage/Nodejs/js/TableSerach.js"></script>
+
+</body>
+
+</html>

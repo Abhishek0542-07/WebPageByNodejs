@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        Login Page
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/mainpage/AdministrativePanel/LoginPageAdmin/AdminLoginPagecss.css">
+</head>
+
+<body>
+    <div class="MainDiv">
+        <div class="responsivediv">
+            <div class="leftdiv">
+                <h5>Welcome Back<br>To Keep connected with us please login with your information info</h5>
+                <button type="submit" class="btn btn-primary" id="callRegisterid" title="Registration button" onclick="REGISTER_PAGE_CALL();">Register</button>
+            </div>
+            <div class="rightdiv">
+                <h5 class="titlename">Admin Login</h5>
+                <div class="col-sm">
+                    <label for="inputAddress">Email Id *</label>
+                    <input type="text" class="form-group" id="emailaddress" placeholder="Enter Email id" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" autocomplete="off" />
+                    <!-- <span id="error" style="display:none;color:red; font-size:14px;">Wrong email</span> -->
+                </div>
+
+                <div class="col-sm">
+                    <label for="inputAddress">Password *</label>
+                    <input type="Password" class="form-group" id="loginPasswordid" placeholder="Enter Password" autocomplete="new-password"><i title="Show/hide Password" class="fas fa-eye-slash" id="logintogglePassword" onclick="changehideshow();"></i>
+                </div>
+
+                <div class="row">
+                    <div class="Remembermediv">
+                        <input type="checkbox" class="form-group" id="REMEMBER_OPTION" placeholder="Enter Repeat Password" value="1" autocomplete="new-password" onchange="doalert(this.id)">
+                        <h1 id="Remembermetext">Remember me</h1>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="forgetpasswordid" title="Forget Password button" onclick="FORGET_PASSWORD_CALL();"><u>Forget Password</u></button>
+                </div>
+                <div class="col-sm1">
+                    <button type="submit" class="btn btn-primary" id="Registerid" title="Login button" onclick="Savedata(this);">Login</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <script type="text/javascript" src="/stylesheet/jquery/dist/jquery.min.js"></script>
+    <script>
+        function REGISTER_PAGE_CALL() {
+            window.location = "/mainpage/AdministrativePanel/AdminRegistrationPage/AdminRegistrationPage.html";
+        }
+
+        function FORGET_PASSWORD_CALL() {
+            window.location = "/mainpage/AdministrativePanel/ForgetPassword/AdminForget/AdminForgetPassword.html";
+        }
+
+        function changehideshow() {
+            var inputpassword = document.getElementById('loginPasswordid'),
+                icon = document.getElementById('logintogglePassword');
+            icon.onclick = function() {
+                if (inputpassword.className == 'active') {
+                    inputpassword.setAttribute('type', 'text');
+                    icon.className = 'fas fa-eye';
+                    inputpassword.className = '';
+                } else {
+                    inputpassword.setAttribute('type', 'password');
+                    icon.className = 'fas fa-eye-slash';
+                    inputpassword.className = 'active';
+
+                }
+            }
+        }
+        var repeatpassword = false;
+
+        function doalert(id) {
+            if (this.checked) {
+                repeatpassword = true;
+
+            } else {
+                repeatpassword = false;
+            }
+        }
+
+        function Savedata(buttonid) {
+            var email = document.getElementById("emailaddress").value;
+            var password = document.getElementById("loginPasswordid").value;
+
+
+            if (email != '' && password != '') {
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:2000/ADMIN_REGISTARTION/ADMIN_LOGIN_DATA",
+                    data: {
+                        email: email,
+                        password: password
+                    },
+                    success: function(data) {
+                        if (data == true) {
+                            window.location = "/mainpage/index.html";
+                        } else {
+                            alert(data);
+                        }
+                    },
+                    error: function(jqXHR, textStatus, err) {
+                        alert('text status ' + textStatus + ', err ' + err)
+                    }
+                });
+            } else {
+                alert("Any input box empty");
+            }
+        }
+
+
+        function ValidateEmail(inputText) {
+            var Passwordvalue = document.getElementById(inputText).value;
+            alert(Passwordvalue);
+            var mailformat = /^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!\.)){0,61}[a-zA-Z0-9]?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!$)){0,61}[a-zA-Z0-9]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/;
+            if (Passwordvalue.match(mailformat)) {
+                alert("Valid email address!");
+                document.form1.text1.focus();
+                return true;
+            } else {
+                alert("You have entered an invalid email address!");
+                document.form1.text1.focus();
+                return false;
+            }
+        }
+        $('form').bind("keypress", function(e) {
+            if (e.keyCode == 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+        var el = document.getElementById('emailaddress');
+        el.addEventListener('keydown', function(event) {
+            var Passwordvalue = document.getElementById('emailaddress').value;
+            var re = /([A-Z0-9a-z_-][^@])+?@[^$#<>?]+?\.[\w]{2,4}/.test(Passwordvalue);
+            if (Passwordvalue.length != 0) {
+                if (!re) {
+                    $('#error').show();
+                } else {
+                    $('#error').hide();
+                }
+            } else {
+                $('#error').hide();
+            }
+            if (event.keyCode == 8 && event.keyCode == 46 && event.keyCode == 13) {
+                if (Passwordvalue.length != 0) {
+                    $('#error').show();
+                } else {
+                    $('#error').hide();
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

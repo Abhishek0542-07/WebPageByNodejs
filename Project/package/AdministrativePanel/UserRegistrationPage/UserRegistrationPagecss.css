@@ -1,0 +1,141 @@
+html {
+    font-size: 70.5%;
+}
+
+.MainDivRegistration {
+    background-image: linear-gradient( 45deg, #0072ff99, #24d271);
+    object-fit: cover;
+    width: 100%;
+    height: 98vh;
+    display: grid;
+    border-radius: 10px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+.MainDivRegistration .ResponsiveDiv {
+    display: grid;
+    width: 55vw;
+    grid-template-columns: repeat(1, 1fr);
+    margin: auto;
+    justify-items: center;
+}
+
+.MainDivRegistration .ResponsiveDiv .centerdiv {
+    background-color: rgb(255 255 255);
+    border-radius: 20px;
+    display: grid;
+    width: 37vw;
+    height: 92vh;
+    grid-template-rows: repeat(6, 1fr);
+    justify-content: center;
+    box-shadow: 0px 0px 8px 6px #040404;
+}
+
+.MainDivRegistration .ResponsiveDiv .centerdiv h5 {
+    font-size: 4.5rem;
+    text-align: center;
+    margin: auto;
+    color: #2d2727;
+}
+
+.MainDivRegistration .ResponsiveDiv .centerdiv .col-sm {
+    width: 50vw;
+    height: 15vh;
+    display: grid;
+    justify-content: center;
+    grid-template-rows: repeat(2, 1fr);
+    /* background-color: yellow; */
+    align-items: center;
+    justify-items: center
+}
+
+.MainDivRegistration .ResponsiveDiv .centerdiv .col-sm #togglePassword {
+    font-size: 2.32rem;
+    margin-left: 90%;
+    margin-top: -53px;
+    justify-content: center;
+    align-items: baseline;
+    color: black;
+    cursor: pointer;
+    border-top-right-radius: 14px;
+    border-bottom-right-radius: 14px;
+    z-index: 100;
+}
+
+.MainDivRegistration .ResponsiveDiv .centerdiv .col-sm input {
+    height: 6vh;
+    margin-left: 0.9rem !important;
+    background-color: transparent;
+    color: black;
+    border: 0px;
+    outline: none;
+    font-size: 18px !important;
+    font-weight: bold;
+    text-align: center;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    border-radius: 7px;
+    border: 3px solid #3f3333c7 !important;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    -ms-border-radius: 7px;
+    -o-border-radius: 7px;
+}
+
+.MainDivRegistration .ResponsiveDiv .centerdiv .column #forgetpasswordid {
+    margin-top: -1.5rem !important;
+    outline: none;
+    border: none;
+    float: left;
+    display: flex;
+    margin-left: 15px;
+    font-size: 18px !important;
+    font-weight: bold;
+    background-color: transparent;
+    color: black;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    cursor: pointer;
+    box-shadow: 0px 0px 0px transparent;
+    -webkit-box-shadow: 0px 0px 0px transparent !important;
+    -moz-box-shadow: 0px 0px 0px transparent !important;
+}
+
+.MainDivRegistration .ResponsiveDiv .centerdiv .column #forgetpasswordid:hover {
+    color: blue;
+    box-shadow: 0px 0px 0px transparent;
+    -webkit-box-shadow: 0px 0px 0px transparent;
+    -moz-box-shadow: 0px 0px 0px transparent;
+}
+
+#Registerid {
+    /* width: -webkit-fill-available; */
+    color: white;
+    background-color: #505050;
+    font-size: 3rem;
+    height: 8vh;
+    text-align: center;
+    font-weight: bold;
+    -webkit-border-radius: .5rem;
+    box-shadow: 0px 0px 5px 2px #ccc6c6;
+    -moz-border-radius: 35px;
+    outline: none;
+    cursor: pointer;
+}
+
+#Registerid:hover {
+    box-shadow: 0px 0px 5px 2px #946060;
+}
+
+input:focus {
+    border: 3px solid rgb(0, 255, 76) !important;
+}

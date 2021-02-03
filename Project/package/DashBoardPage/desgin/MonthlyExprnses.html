@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Monthly Expenses</title>
+    <link rel="stylesheet" type="text/css" href="/mainpage/DashBoardPage/css/MonthlyExpensescss.css">
+</head>
+
+<body>
+    <form action="" id="MonthlyExpensesformid" onsubmit="return false">
+        <h5 class="text" style="float: left;"> Expenses DashBoard</h5>
+
+        <div id="Searchbarid">
+            <select id="selectmonth" onchange="refreshtable()">
+    </select>
+            <select id="selectyear" onchange="refreshtable()">
+    </select>
+            <button type="submit" class="btn btn-primary" id="resetbutton" onclick=" refreshtable();"><i class="fas fa-sync-alt"></i></button>
+            <button type="submit" class="btn btn-primary" id="dailyexpensesid" onclick="">Daily Expenes</button>
+
+        </div>
+        <div id="pagechange">
+            <button type="submit" class="form-control mr-sm-2 btn-primary" title="button disabled Please click next button" id="backpageloadid" onclick="backpageload(this);"><i class="fas fa-arrow-left"></i> Back</button>
+            <button type="submit" class="form-control mr-sm-2 btn-primary" id="Nextpageloadid" onclick="Nextpageload(this);">Next <i class="fas fa-arrow-right"></i></button>
+        </div>
+        <section id="tableandCardList">
+            <div id="tableshow" style="float: left;">
+            </div>
+        </section>
+        <form>
+
+            <script>
+                var months = new Array(12);
+                months[0] = "January";
+                months[1] = "February";
+                months[2] = "March";
+                months[3] = "April";
+                months[4] = "May";
+                months[5] = "June";
+                months[6] = "July";
+                months[7] = "August";
+                months[8] = "September";
+                months[9] = "October";
+                months[10] = "November";
+                months[11] = "December";
+                var current_date = new Date();
+                month_value = current_date.getMonth();
+                year_value = current_date.getFullYear();
+                var idofmonth = document.getElementById("selectmonth");
+                for (var i = 0; i < months.length; i++) {
+                    idofmonth.add(new Option(months[i], months[i]));
+                }
+                setSelectValues("selectmonth", months[month_value]);
+                var idofyear = document.getElementById("selectyear");
+                for (var i = 1996; i < 2040; i++) {
+                    idofyear.add(new Option(i, i));
+                    $("#selectyear").find("option").addClass("OptionClass");
+                }
+                setSelectValues("selectyear", year_value);
+
+                function setSelectValues(id, val) {
+                    document.getElementById(id).value = val;
+                }
+            </script>
+            <script>
+                var tablebodyval = '';
+                var PATH_PAGE_ARRAY = new Array();
+                PATH_PAGE_ARRAY[0] = '../DashBoardPage/desgin/CardLayoutShow.html';
+                PATH_PAGE_ARRAY[1] = '../DashBoardPage/desgin/ChartLayoutShow.html';
+                var PATH_PAGE_ARRAY_LENGTH = PATH_PAGE_ARRAY.length;
+                document.getElementById("backpageloadid").disabled = true;
+                var count = 0;
+                var dash_page = $("#tableshow");
+
+                function backpageload(id) {
+                    if (count > PATH_PAGE_ARRAY_LENGTH) {
+                        count -= 1;
+                        $("#tableshow").empty();
+                        dash_page.load(PATH_PAGE_ARRAY[count]);
+                    } else {
+                        document.getElementById("backpageloadid").disabled = true;
+                    }
+                }
+
+                function Nextpageload(id) {
+                    document.getElementById("backpageloadid").disabled = false;
+                    if (count < PATH_PAGE_ARRAY_LENGTH) {
+                        $("#tableshow").empty();
+                        alert(PATH_PAGE_ARRAY[count]);
+                        dash_page.load(PATH_PAGE_ARRAY[count]);
+                        count++;
+                    }
+                }
+
+                function refreshtable() {
+                    var m = document.getElementById("selectmonth");
+                    var month = m.options[m.selectedIndex].value;
+                    var y = document.getElementById("selectyear");
+                    var year = y.options[y.selectedIndex].value;
+
+                    $.ajax({
+                        type: "POST",
+                        url: "http://localhost:2000/DASHBOARD_PAGE/month-year",
+                        data: {
+                            month: month,
+                            year: year
+                        },
+                        success: function(data) {},
+                        error: function(jqXHR, textStatus, err) {
+                            alert('text status ' + textStatus + ', err ' + err)
+                        }
+                    });
+                    $('#tableshow').empty();
+                    $('#tableshow').load('/mainpage/DashBoardPage/TableDesgin/TableOverAllShow.html');
+                }
+                refreshtable();
+
+                function exportPDF(td) {}
+            </script>
+</body>
+
+</html>

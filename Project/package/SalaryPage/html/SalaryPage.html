@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Expenses Page</title>
+
+    <link rel="stylesheet" type="text/css" href="/mainpage/SalaryPage/css/salarysheet.css">
+</head>
+
+<body>
+
+    <form action="" id="SALARY_FROM_DIV" onsubmit="return false">
+
+        <div id="itemsdiv">
+
+            <div class="row-input-1">
+                <div class="form-group">
+                    <label for="inputAddress">Date *</label>
+                    <input type="text" class="form-control" id="dateinput" placeholder="Enter Date" onclick="showpopCalender('#dateinput');" autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                    <label for="inputAddress">Employes Name *</label>
+                    <input type="text" class="form-control" id="EMPLOYES_NAME" placeholder="Enter Employes Name">
+                </div>
+
+                <div class="form-group">
+                    <label for="inputAddress">Designation *</label>
+                    <input type="text" class="form-control" id="Designation" placeholder="Enter Designation">
+                </div>
+
+                <div class="form-group">
+                    <label for="inputAddress">Salary Amount *</label>
+                    <input type="number" class="form-control" id="Salary_of_Month" placeholder="Enter Salary Amount">
+                </div>
+
+                <div class="form-group">
+                    <label for="inputAddress">C/R Date *</label>
+                    <input type="text" class="form-control" id="Convence_Received_Date" placeholder="Enter C/R Date" onclick="showpopCalender('#Convence_Received_Date');">
+                </div>
+
+                <div class="form-group">
+                    <label for="inputAddress">Convenience Amount *</label>
+                    <input type="number" class="form-control" id="Convence_Amount" placeholder="Enter Convenience Amount">
+                </div>
+            </div>
+
+            <div class="row-input-2">
+                <div class="moreelement">
+
+                    <div class="form-group">
+                        <label for="inputAddress">Maintenance Amount *</label>
+                        <input type="number" class="form-control" id="Maintance_Amount" placeholder="Enter Maintenance Amount">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputAddress">Advance Amount *</label>
+                        <input type="number" class="form-control" id="Advance_Amount" placeholder="Enter Advance Amount"></div>
+
+                    <div class="form-group">
+                        <label for="inputAddress">Total Amount *</label>
+                        <input type="number" class="form-control" id="Total_Salary_Month" placeholder="Enter Total Amount"></div>
+                    <div class="form-group">
+                        <label for="inputAddress">Amount Status *</label>
+                        <select class="form-control" id="amountstatus" onchange="methodnotequal()">
+                    <option>Select Method</option>
+                    <option>Pending</option>
+                    <option>Clear</option>
+                    </select>
+                    </div>
+                    <div class="form-group" style="margin: auto;
+                    height: 2vh;">
+                        <button type="submit" class="btn btn-primary" id="insertbutton" title="Save button" onclick="insert(this);"><i class="fas fa-plus-circle"></i> inesrt</button>
+                        <button type="submit" class="btn btn-primary" id="updatebutton" title="Update button"><i class="fas fa-sync-alt"></i> Update</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="search-class">
+                <div class="column">
+                    <input type="text" class="form-control" id="searchinputid" title="Search [Name,Date,etc]" placeholder="Search [Name,Date,etc]" onkeyup="serach();">
+                    <select id="selectmonth" title="select month" onchange="refreshtable()">
+                    </select>
+                    <select id="selectyear" title="select year" onchange="refreshtable()">
+                    </select>
+                    <button type="submit" class="btn btn-primary" title="refresh here" id="resetbutton" onclick=" refreshtable();"><i class="fas fa-sync-alt"></i></button>
+                </div>
+                <div class="column1">
+                    <button type="submit" class="btn btn-primary" id="importbutton" title="import button" onclick="importExceltoDB(this)"><i class="fas fa-upload"></i> Import</button>
+                    <button type="submit" class="btn btn-primary" id="printbtn" title="Print Page" onclick=""><i class="fas fa-print"></i> Print</button>
+                    <button type="submit" class="btn btn-primary" id="backbtn" title="BackPage" onclick="backpageload();"><i class="fas fa-arrow-left"></i> Back</button>
+                    <button type="submit" class="btn btn-primary" id="nextbtn" title="NextPage" onclick="nextpageload();">Next <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+        </div>
+        <div id="tablediv">
+        </div>
+        <div id="OpeningPopup"></div>
+    </form>
+
+    <script src="/JQuery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/asset/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
+    <script>
+        var months = new Array(12);
+        months[0] = "January";
+        months[1] = "February";
+        months[2] = "March";
+        months[3] = "April";
+        months[4] = "May";
+        months[5] = "June";
+        months[6] = "July";
+        months[7] = "August";
+        months[8] = "September";
+        months[9] = "October";
+        months[10] = "November";
+        months[11] = "December";
+
+        var current_date = new Date();
+        month_value = current_date.getMonth();
+        year_value = current_date.getFullYear();
+
+        var idofmonth = document.getElementById("selectmonth");
+        for (var i = 0; i < months.length; i++) {
+            idofmonth.add(new Option(months[i], months[i]));
+        }
+        setSelectValues("selectmonth", months[month_value]);
+        var idofyear = document.getElementById("selectyear");
+        for (var i = 1996; i < 2040; i++) {
+            idofyear.add(new Option(i, i));
+        }
+        setSelectValues("selectyear", year_value);
+
+        function setSelectValues(id, val) {
+            document.getElementById(id).value = val;
+        }
+
+        function setTextBoxval() {
+            var y = document.getElementById("selectsubtitlevalue");
+            if (y.options[y.selectedIndex].text != 'Select values') {
+                document.getElementById("subtitleinput").value = y.options[y.selectedIndex].text;
+            } else {
+                alert("select other option");
+            }
+        }
+
+        function methodnotequal() {
+            var y = document.getElementById("amountstatus");
+            if (y.options[y.selectedIndex].text != 'Select Method') {} else {
+                alert("select other option");
+            }
+        }
+
+        var count = 1;
+        document.getElementById("backbtn").disabled = true;
+        var dash_page = $("#tablediv");
+
+        function backpageload() {
+            $("#tablediv").empty();
+            if (count - 1 > 1) {
+                // $('#tablediv').load('/mainpage/SalaryPage/TableDesgin/MoreDataTable.html');
+            } else {
+                document.getElementById("nextbtn").disabled = false;
+                document.getElementById("backbtn").disabled = true;
+                refreshtable();
+            }
+            count--;
+        }
+
+        function nextpageload() {
+            if (count <= 1) {
+                $("#tablediv").empty();
+                $('#tablediv').load('/mainpage/SalaryPage/TableDesgin/SalaryAmountPopup.html');
+                document.getElementById("nextbtn").disabled = true;
+                document.getElementById("backbtn").disabled = false;
+                count++;
+            } else {
+
+            }
+
+        }
+    </script>
+    <script>
+        var selectedrow = "";
+        var selectedrowid = 0;
+
+        function insert(id) {
+
+            var date = document.getElementById("dateinput").value;
+            var EMPLOYES_NAME = document.getElementById("EMPLOYES_NAME").value;
+            var Designation = document.getElementById("Designation").value;
+            var Salary_of_Month = document.getElementById("Salary_of_Month").value;
+            var Convence_Received_Date = document.getElementById("Convence_Received_Date").value;
+            var Convence_Amount = document.getElementById("Convence_Amount").value;
+            var Maintance_Amount = document.getElementById("Maintance_Amount").value;
+            var Advance_Amount = document.getElementById("Advance_Amount").value;
+            var Total_Salary_Month = document.getElementById("Total_Salary_Month").value;
+
+            var am = document.getElementById("amountstatus");
+            var amountstatus = am.options[am.selectedIndex].text;
+
+            var m = document.getElementById("selectmonth");
+            var month = m.options[m.selectedIndex].text;
+            var y = document.getElementById("selectyear");
+            var year = y.options[y.selectedIndex].text;
+
+            var dateMomentObject = moment(date, "YYYY-MM-DD").format("DD/MM/YYYY");
+
+            if (EMPLOYES_NAME != '' && Designation != '' && Salary_of_Month != '' && date != 'dd/mm/yyy' && date != 'Enter date' && month != 'Select Month' && year != 'Select Year' && amountstatus != 'Select Method' && Total_Salary_Month != '') {
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:2000/SALARY_PAGE/SalaryInsertData",
+                    data: {
+                        date: dateMomentObject,
+                        EMPLOYES_NAME: EMPLOYES_NAME,
+                        Designation: Designation,
+                        Salary_of_Month: Salary_of_Month,
+                        Convence_Received_Date: Convence_Received_Date,
+                        Convence_Amount: Convence_Amount,
+                        Maintance_Amount: Maintance_Amount,
+                        Advance_Amount: Advance_Amount,
+                        Total_Salary_Month: Total_Salary_Month,
+                        amountstatus: amountstatus,
+                        month: month,
+                        year: year,
+                        insertdatetime: (new Date().toDateString() + " " + new Date().toLocaleTimeString())
+                    },
+                    success: function(data) {
+                        alert('Success insert data');
+                        refreshtable();
+                    },
+                    error: function(jqXHR, textStatus, err) {
+                        alert('text status ' + textStatus + ', err ' + err)
+                    }
+                });
+            } else {
+                alert("Please Change values.");
+            }
+        }
+
+        function updatetodb(id) {
+            var date = document.getElementById("dateinput").value;
+            var EMPLOYES_NAME = document.getElementById("EMPLOYES_NAME").value;
+            var Designation = document.getElementById("Designation").value;
+            var Salary_of_Month = document.getElementById("Salary_of_Month").value;
+            var Convence_Received_Date = document.getElementById("Convence_Received_Date").value;
+            var Convence_Amount = document.getElementById("Convence_Amount").value;
+            var Maintance_Amount = document.getElementById("Maintance_Amount").value;
+            var Advance_Amount = document.getElementById("Advance_Amount").value;
+            var Total_Salary_Month = document.getElementById("Total_Salary_Month").value;
+
+            var am = document.getElementById("amountstatus");
+            var amountstatus = am.options[am.selectedIndex].text;
+
+            var m = document.getElementById("selectmonth");
+            var month = m.options[m.selectedIndex].text;
+            var y = document.getElementById("selectyear");
+            var year = y.options[y.selectedIndex].text;
+
+            var dateMomentObject = moment(date, "YYYY-MM-DD").format("DD/MM/YYYY");
+
+            if (EMPLOYES_NAME != '' && Designation != '' && Salary_of_Month != '' && date != 'dd/mm/yyy' && date != 'Enter date' && month != 'Select Month' && year != 'Select Year' && amountstatus != 'Select Method' && Total_Salary_Month != '') {
+                if (selectedrowid != 0) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            alert(this.responseText);
+                            refreshtable();
+                        }
+                    };
+                    var filepath = "../SalaryPage/SalaryDB/SalaryUpdateDB.php";
+                    xhr.open("POST", filepath);
+                    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    xhr.send("id=" + id + "&idselectval=" + selectedrowid + "&date=" + dateMomentObject + "&EMPLOYES_NAME=" + EMPLOYES_NAME + "&Desgination=" + Designation + "&Salary_of_Month=" + Salary_of_Month + "&Convence_Received_Date=" + Convence_Received_Date + "&Convence_Amount=" + Convence_Amount + "&Maintance_Amount=" + Maintance_Amount + "&Advance_Amount=" + Advance_Amount + "&Total_Salary_Month=" + Total_Salary_Month + "&Method_of_Status=" + amountstatus + "&month=" + month + "&year=" + year);
+                } else {
+                    alert("Table Row Not Selected");
+                }
+            } else {
+                alert("Please Change values.");
+            }
+        }
+
+        function salaryedit(td) {
+            selectedrow = td.parentElement.parentElement;
+            selectedrowid = selectedrow.cells[0].innerHTML;
+
+            document.getElementById("dateinput").value = selectedrow.cells[1].innerHTML;
+            document.getElementById("EMPLOYES_NAME").value = selectedrow.cells[2].innerHTML;
+            document.getElementById("Designation").value = selectedrow.cells[3].innerHTML;
+            document.getElementById("Salary_of_Month").value = selectedrow.cells[4].innerHTML;
+            document.getElementById("Convence_Received_Date").value = selectedrow.cells[5].innerHTML;
+            document.getElementById("Convence_Amount").value = selectedrow.cells[6].innerHTML;
+            document.getElementById("Maintance_Amount").value = selectedrow.cells[7].innerHTML;
+            document.getElementById("Advance_Amount").value = selectedrow.cells[8].innerHTML;
+            document.getElementById("Total_Salary_Month").value = selectedrow.cells[9].innerHTML;
+            document.getElementById("amountstatus").value = selectedrow.cells[10].innerHTML;
+        }
+
+        function Salarydel(td) {
+            var txt = "";
+            selectedrow = td.parentElement.parentElement;
+            var deleteid = selectedrow.cells[0].innerHTML;
+            var m = document.getElementById("selectmonth");
+            var month = m.options[m.selectedIndex].text;
+            var y = document.getElementById("selectyear");
+            var year = y.options[y.selectedIndex].text;
+
+            var r = confirm("You want to delete values!");
+            if (r == true) {
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        alert(this.responseText);
+                        refreshtable();
+                    }
+
+                };
+                var filepath = "../SalaryPage/SalaryDB/SalaryDeleteDB.php";
+                xhr.open("POST", filepath);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.send("btndeleteid=" + td + "&idselectval=" + deleteid + "&month=" + month + "&year=" + year);
+            }
+        }
+    </script>
+    <script>
+        var m = document.getElementById("selectmonth");
+        var month = m.options[m.selectedIndex].value;
+        var y = document.getElementById("selectyear");
+        var year = y.options[y.selectedIndex].value;
+
+        function refreshtable() {
+            var m = document.getElementById("selectmonth");
+            var month = m.options[m.selectedIndex].value;
+            var y = document.getElementById("selectyear");
+            var year = y.options[y.selectedIndex].value;
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:2000/SALARY_PAGE/month-year",
+                data: {
+                    month: month,
+                    year: year
+                },
+                success: function(data) {},
+                error: function(jqXHR, textStatus, err) {
+                    alert('text status ' + textStatus + ', err ' + err)
+                }
+            });
+            $("#tablediv").load("/mainpage/SalaryPage/TableDesgin/SalaryTable.html");
+        }
+
+        function importExceltoDB(id) {
+            $('#OpeningPopup').load('/mainpage/SalaryPage/ImportExceltoDb/SalaryImportExcel_to_db.html');
+        }
+
+        function showAmountInbutton(text, columnname) {
+            ShowPopUp();
+            var m = document.getElementById("selectmonth");
+            var month = m.options[m.selectedIndex].value;
+            var y = document.getElementById("selectyear");
+            var year = y.options[y.selectedIndex].value;
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var getvalues = this.responseText;
+                    var convertrupess = new Intl.NumberFormat('en-IN', {
+                        style: 'currency',
+                        currency: 'INR'
+                    }).format(getvalues);
+                    document.getElementById("ShowAmountinId").innerHTML = text + "<br>" + convertrupess;
+                }
+            };
+            var filelocation = "../ExpensesPage/MysqlDbExpenses/SumOfdBColumn.php";
+            xmlhttp.open("POST", filelocation);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send("month=" + month + "&year=" + year + "&columnname=" + columnname);
+        }
+        refreshtable();
+    </script>
+    <script type="text/javascript" src="/mainpage/CalenderUI/script.js"></script>
+    <script>
+        document.getElementById("updatebutton").addEventListener("click", function() {
+            updatetodb("updatebutton");
+        });
+        addCalenderIcon('#dateinput');
+        addCalenderIcon('#Convence_Received_Date');
+    </script>
+
+    <!-- <script type="text/javascript" src="../ExpensesPage/tableinsearch.js"></script> -->
+</body>
+
+</html>

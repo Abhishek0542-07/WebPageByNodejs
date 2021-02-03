@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Table show</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+    <link rel="stylesheet" type="text/css" href="/mainpage/ExpensesPage/TableDesign/TableShowcss.css">
+
+    <div id="tableshow">
+        <table class="table-responsive" id="expensestable">
+            <thead>
+                <tr>
+                    <th scope="col">Sr.No.</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Mehtod of D/C/CH</th>
+                    <th scope="col">Received by</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Debit</th>
+                    <th scope="col">Credit</th>
+                    <th scope="col">Remaining Amount</th>
+                    <th scope="col">SubTitle</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyid">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        $.ajax({
+                type: 'GET',
+                url: 'http://localhost:2000/expensespage/user-list',
+                dataType: 'json'
+            }).done(function(data) {
+                console.log(Object.keys(data).length);
+                for (let index = 0; index < Object.keys(data).length; index++) {
+                    if (index == 0) {
+                        $('#tbodyid').append('<tr><td>' + data[index].PRIMARY_ID + '</td><td>' +
+                            data[index].DATE_OF_PAYMENT + '</td><td>' + data[index].METHOD_OF_PAYMENT +
+                            '</td><td>' + data[index].PAID_TO + '</td><td>' + data[index].DESCRIPTION +
+                            '</td><td>' + data[index].DEBIT + '</td> <td>' + data[index].CREDIT +
+                            '</td><td>' + data[index].BALANCE + '</td><td>' + data[index].SUBTITLE +
+                            '</td><td ><i class="fa fa-edit edittable" title="Edit of Table : row : ' + data[index].PRIMARY_ID + ' this is not editable " style="opacity: 0.5; cursor: not-allowed;"  onclick="editable(this)"></i>' +
+                            ' <i class="fa fa-trash" title="Delete of Table : row :  ' + data[index].PRIMARY_ID + '  this is not delete "  style="opacity: 0.5; cursor: not-allowed;"  onclick="del(this)"></i></td></tr>');
+                    } else {
+                        $('#tbodyid').append('<tr><td>' + data[index].PRIMARY_ID + '</td><td>' +
+                            data[index].DATE_OF_PAYMENT + '</td><td>' + data[index].METHOD_OF_PAYMENT +
+                            '</td><td>' + data[index].PAID_TO + '</td><td>' + data[index].DESCRIPTION +
+                            '</td><td>' + data[index].DEBIT + '</td> <td>' + data[index].CREDIT +
+                            '</td><td>' + data[index].BALANCE + '</td><td>' + data[index].SUBTITLE +
+                            '</td><td ><i class="fa fa-edit edittable" title="Edit of Table : row : ' + data[index].PRIMARY_ID + ' "  onclick="editable(this)"></i>' +
+                            ' <i class="fa fa-trash" title="Delete of Table : row :  ' + data[index].PRIMARY_ID + ' "  onclick="del(this)"></i></td></tr>');
+                    }
+
+                }
+            })
+            .fail(function(jqXHR, textstatus, err) {});
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .MAINTABELDIV {
+            width: 100vw;
+            height: 54.5vh;
+            border-radius: 1.3rem;
+            display: flow-root;
+            background-color: aquamarine;
+            box-shadow: rgb(0 0 0) 0px 0px 7px 2px;
+        }
+        
+        .HeaderDIV {
+            width: 100%;
+            height: 9%;
+            display: flex;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            background-color: #0f4297;
+        }
+        
+        .TableBody {
+            width: 100%;
+            height: 50vh;
+            display: flex;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            background-color: #526b7a;
+            overflow: scroll;
+            overflow-x: hidden;
+        }
+        
+        .table-responsive {
+            display: inline-table;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .col {
+            width: 10%;
+        }
+        
+        .col1 {
+            width: 14%;
+        }
+        
+        .HeaderDIV .table-responsive tr {
+            margin: auto;
+            color: aliceblue;
+            padding: 10px;
+            height: 5vh;
+            font-size: 1.5rem;
+        }
+        
+        .TableBody .table-responsive tr {
+            margin: auto;
+            color: aliceblue;
+            padding: 10px;
+            height: 5vh;
+            font-size: 1.5rem;
+        }
+        
+        .TableBody .table-responsive i {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="MAINTABELDIV">
+        <div class="HeaderDIV">
+            <table class="table-responsive" id="expensestable">
+                <thead>
+                    <tr>
+                        <th class="col">Sr.No.</th>
+                        <th class="col">Date</th>
+                        <th class="col">Customer Name</th>
+                        <th class="col">Cheque No.</th>
+                        <th class="col">Cheuqe Amount</th>
+                        <th class="col">Bank Name</th>
+                        <th class="col1">Bank Transfer Amount</th>
+                        <th class="col">Amount Status</th>
+                        <th class="col">GST Amount</th>
+                        <th class="col">Action</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="TableBody">
+            <table class="table-responsive">
+                <tbody id="Tbody">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        $.ajax({
+                type: 'GET',
+                url: 'http://localhost:2000/CHEQUE_PAGE/user-list',
+                dataType: 'json'
+            }).done(function(data) {
+                for (let index = 0; index < Object.keys(data).length; index++) {
+                    var GST_CALULATE = 0;
+                    if (data[index].Bank_Transfer_Amount != 0) {
+                        GST_CALULATE = ((data[index].Bank_Transfer_Amount * 18) / 100);
+                    } else {
+                        GST_CALULATE = ((data[index].Cheque_Amount * 18) / 100);
+                    }
+                    $('#Tbody').append('<tr><td class="col">' + data[index].PRIMARY_ID + '</td><td class="col">' +
+                        data[index].Date_Of_Payment + '</td><td class="col">' + data[index].CustomerName +
+                        '</td><td class="col">' + data[index].Cheuqe_No + '</td><td class="col">' + data[index].Cheque_Amount +
+                        '</td><td class="col">' + data[index].BankName + '</td> <td class="col1">' + data[index].Bank_Transfer_Amount +
+                        '</td><td class="col">' + data[index].Amount_Status + '</td><td class="col">' + GST_CALULATE +
+                        '</td><td class="col"><i class="fa fa-edit edittable" title="Edit of Table : row : ' + data[index].PRIMARY_ID + '"  onclick="CHEQUE_EDIT(this)"></i>' +
+                        ' <i class="fa fa-trash" title="Delete of Table : row :  ' + data[index].PRIMARY_ID + '"   onclick="CHEQUE_DELETE(this)"></i></td></tr>');
+                }
+            })
+            .fail(function(jqXHR, textstatus, err) {});
+    </script>
+</body>
+
+</html>

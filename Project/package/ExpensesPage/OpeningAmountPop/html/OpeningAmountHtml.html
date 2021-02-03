@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Amount Popup</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/mainpage/ExpensesPage/OpeningAmountPop/css/OpeningAmountcss.css">
+</head>
+
+<body>
+    <div class="form-popup" id="popupid">
+        <form action="" id="addopeningamountpopup" onsubmit="return false">
+            <h5>Add Opening Amount</h5>
+            <span id="spanid">&#x20B9;</span>
+            <input type="number" placeholder="Enter Opening Amount" id="inputtext" required><br>
+            <button type="submit" class="btn btn-primary" onclick="savedata(this);">Save</button>
+            <button type="button" class="btn btn-primary" onclick="closeForm1()">Close</button>
+        </form>
+    </div>
+
+    <script>
+        function savedata(id) {
+            var Openingamount = document.getElementById("inputtext").value;
+            if (Openingamount != '') {
+
+                var months = new Array(12);
+                months[0] = "January";
+                months[1] = "February";
+                months[2] = "March";
+                months[3] = "April";
+                months[4] = "May";
+                months[5] = "June";
+                months[6] = "July";
+                months[7] = "August";
+                months[8] = "September";
+                months[9] = "October";
+                months[10] = "November";
+                months[11] = "December";
+
+                var current_date = new Date();
+                var dateMomentObject = moment(current_date, "YYYY-MM-DD").format("DD/MM/YYYY");
+
+                month_value = current_date.getMonth();
+                year_value = current_date.getFullYear();
+
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:2000/openingamount/ExpenseAddOpening",
+                    data: {
+                        date: dateMomentObject,
+                        amount: Openingamount,
+                        month: months[month_value],
+                        year: year_value,
+                        insertdatetime: (new Date().toDateString() + " " + new Date().toLocaleTimeString())
+                    },
+                    success: function(data) {
+                        alert('Success insert data');
+                        closeForm1();
+                    },
+                    error: function(jqXHR, textStatus, err) {
+                        alert('text status ' + textStatus + ', err ' + err)
+                    }
+                });
+
+            } else {
+                alert("Please types text box");
+            }
+        }
+
+        function openForm() {
+            document.getElementById("popupid").style.display = "flex";
+        }
+
+        function closeForm1() {
+            document.getElementById("popupid").style.display = "none";
+        }
+    </script>
+</body>
+
+</html>
